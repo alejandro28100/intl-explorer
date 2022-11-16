@@ -7,10 +7,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  FormLabel,
   FormControlLabel,
-  RadioGroup,
-  Radio,
   AccordionSummary,
   Accordion,
   AccordionDetails,
@@ -24,6 +21,7 @@ import {
 import { ExpandMore } from "@mui/icons-material";
 
 import { DATE_STYLES, TIME_STYLES, LOCALES, DAY_PERIODS } from "../../data";
+import { RadioGroup } from "components";
 
 type TDateStyle = "full" | "long" | "medium" | "short";
 type TTimeStyle = "full" | "long" | "medium" | "short";
@@ -123,41 +121,20 @@ function DateTimeFormat() {
               <AccordionDetails
                 sx={{ display: "flex", gap: 2, flexDirection: "column" }}
               >
-                <FormControl>
-                  <FormLabel>Date style</FormLabel>
-                  <RadioGroup
-                    row
-                    value={dateStyle}
-                    onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
-                  >
-                    {DATE_STYLES.map((value) => (
-                      <FormControlLabel
-                        key={value}
-                        value={value}
-                        control={<Radio />}
-                        label={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
+                <RadioGroup
+                  label="Date style"
+                  value={dateStyle}
+                  onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
+                  options={DATE_STYLES}
+                />
 
-                <FormControl>
-                  <FormLabel>Time style</FormLabel>
-                  <RadioGroup
-                    row
-                    value={timeStyle}
-                    onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
-                  >
-                    {TIME_STYLES.map((value) => (
-                      <FormControlLabel
-                        key={value}
-                        value={value}
-                        control={<Radio />}
-                        label={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
+                <RadioGroup
+                  label="Time style"
+                  value={timeStyle}
+                  onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
+                  options={TIME_STYLES}
+                />
+
                 <Alert severity="info">
                   <AlertTitle>Note:</AlertTitle>
                   <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
@@ -178,23 +155,12 @@ function DateTimeFormat() {
               <AccordionDetails
                 sx={{ display: "flex", gap: 2, flexDirection: "column" }}
               >
-                <FormControl>
-                  <FormLabel>Day period</FormLabel>
-                  <RadioGroup
-                    row
-                    value={dayPeriod}
-                    onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
-                  >
-                    {DAY_PERIODS.map((period) => (
-                      <FormControlLabel
-                        key={period}
-                        value={period}
-                        control={<Radio />}
-                        label={period}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
+                <RadioGroup
+                  label="Day period"
+                  value={dayPeriod}
+                  onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
+                  options={DAY_PERIODS}
+                />
               </AccordionDetails>
             </Accordion>
           </Stack>
