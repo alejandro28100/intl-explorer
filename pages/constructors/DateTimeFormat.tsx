@@ -42,11 +42,12 @@ function DateTimeFormat() {
     ...(timeStyle && { timeStyle }),
   };
 
-  const codeSnippet = `new Intl.DateTimeFormat("${locale}",${JSON.stringify(
-    options,
-    null,
-    1
-  )})\n.format( new Date() )`;
+  const hasOptions = Object.keys(options).length > 0;
+
+  const optionsSnippet = hasOptions
+    ? `,${JSON.stringify(options, null, 2)}`
+    : "";
+  const codeSnippet = `new Intl.DateTimeFormat("${locale}"${optionsSnippet})\n.format( new Date() )`;
 
   return (
     <Container
