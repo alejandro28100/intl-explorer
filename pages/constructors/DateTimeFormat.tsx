@@ -125,6 +125,9 @@ function DateTimeFormat() {
             <Autocomplete
               value={timeZone}
               options={timezoneOptions}
+              isOptionEqualToValue={(option, value) =>
+                option.timeZone === value.timeZone
+              }
               groupBy={(option) => option.firstLetter}
               getOptionLabel={(option) => option.timeZone}
               onChange={(e, value) => value && setTimeZone(value)}
