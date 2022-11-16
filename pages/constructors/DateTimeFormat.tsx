@@ -37,7 +37,7 @@ type TDayPeriod = "narrow" | "short" | "long";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
-  const [locale, setLocale] = React.useState("en-US");
+  const [locale, setLocale] = React.useState<string>("");
   const [dateStyle, setDateStyle] = React.useState<TDateStyle | undefined>();
   const [timeStyle, setTimeStyle] = React.useState<TTimeStyle | undefined>();
   const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod | undefined>(
@@ -46,24 +46,37 @@ function DateTimeFormat() {
   const [timeZone, setTimeZone] = React.useState<{
     timeZone: string;
     firstLetter: string;
-  }>(() => {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return {
-      timeZone: tz,
-      firstLetter: tz[0].toUpperCase(),
-    };
+  }>({
+    timeZone: "",
+    firstLetter: "",
   });
   const [hour12, setHour12] = React.useState<boolean | undefined>(undefined);
 
-  const formattedDate = new Intl.DateTimeFormat(locale, {
+  const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
     timeStyle,
     dayPeriod,
     hour12,
-    timeZone: timeZone.timeZone,
+    timeZone: Boolean(timeZone.timeZone) ? timeZone.timeZone : undefined,
   }).format(date);
 
   React.useEffect(() => {
+    // Set some default values based on the detected device
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz) {
+      setTimeZone({
+        timeZone: tz,
+        firstLetter: tz[0].toUpperCase(),
+      });
+    }
+
+    const deviceLanguage = navigator.language;
+    if (deviceLanguage) {
+      setLocale(deviceLanguage);
+    }
+    console.log("deviceLanguage", deviceLanguage);
+    console.log("tz", tz);
+
     // Update the date every second
     const timer = setInterval(() => {
       setDate(new Date());
@@ -109,7 +122,7 @@ function DateTimeFormat() {
             flex="1"
             spacing={2}
           >
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+            <FormControl variant="filled">
               <InputLabel>Locale</InputLabel>
               <Select
                 value={locale}
