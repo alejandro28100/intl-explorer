@@ -13,7 +13,7 @@ import {
   Radio,
 } from "@mui/material";
 
-import { DATE_STYLES, TIME_STYLES, LOCALES, CALENDAR } from "../../data";
+import { DATE_STYLES, TIME_STYLES, LOCALES } from "../../data";
 
 type TDateStyle = "full" | "long" | "medium" | "short";
 type TTimeStyle = "full" | "long" | "medium" | "short";
@@ -37,62 +37,99 @@ function DateTimeFormat() {
     return () => clearInterval(timer);
   }, []);
 
+  const options = {
+    ...(dateStyle && { dateStyle }),
+    ...(timeStyle && { timeStyle }),
+  };
+
+  const codeSnippet = `new Intl.DateTimeFormat("${locale}",${JSON.stringify(
+    options,
+    null,
+    1
+  )})\n.format( new Date() )`;
+
   return (
-    <Container maxWidth="md">
-      <Stack spacing={2} py={4}>
-        <Typography component="h1" variant="h3">
+    <Container
+      maxWidth="lg"
+      sx={{
+        height: "100vh",
+      }}
+    >
+      <Stack spacing={2} py={4} sx={{ height: "100%" }}>
+        <Typography component="h1" variant="h6">
           DateTimeFormat
         </Typography>
+        <Stack spacing={2} direction="row" sx={{ flex: 1 }}>
+          <Stack flex="1" spacing={2}>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel>Locale</InputLabel>
+              <Select
+                value={locale}
+                onChange={(e) => setLocale(e.target.value)}
+              >
+                {LOCALES.map(([locale, name]) => (
+                  <MenuItem key={locale} value={locale}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-        <Stack spacing={2}>
-          <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel>Locale</InputLabel>
-            <Select value={locale} onChange={(e) => setLocale(e.target.value)}>
-              {LOCALES.map(([locale, name]) => (
-                <MenuItem key={locale} value={locale}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Date style</FormLabel>
-            <RadioGroup
-              row
-              value={dateStyle}
-              onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
+            <FormControl>
+              <FormLabel>Date style</FormLabel>
+              <RadioGroup
+                row
+                value={dateStyle}
+                onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
+              >
+                {DATE_STYLES.map((value) => (
+                  <FormControlLabel
+                    key={value}
+                    value={value}
+                    control={<Radio />}
+                    label={value}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Time style</FormLabel>
+              <RadioGroup
+                row
+                value={timeStyle}
+                onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
+              >
+                {TIME_STYLES.map((value) => (
+                  <FormControlLabel
+                    key={value}
+                    value={value}
+                    control={<Radio />}
+                    label={value}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Stack>
+          <Stack width="50%" justifyContent="space-between" spacing={2}>
+            <Stack alignItems="center">
+              <Typography align="center" component="h1" variant="h4">
+                {formattedDate}
+              </Typography>
+            </Stack>
+            <Stack
+              sx={{
+                p: 2,
+                border: "solid 1px",
+                flex: 1,
+                overflowY: "auto",
+              }}
             >
-              {DATE_STYLES.map((value) => (
-                <FormControlLabel
-                  key={value}
-                  value={value}
-                  control={<Radio />}
-                  label={value}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Time style</FormLabel>
-            <RadioGroup
-              row
-              value={timeStyle}
-              onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
-            >
-              {TIME_STYLES.map((value) => (
-                <FormControlLabel
-                  key={value}
-                  value={value}
-                  control={<Radio />}
-                  label={value}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+              <pre>
+                <code>{codeSnippet}</code>
+              </pre>
+            </Stack>
+          </Stack>
         </Stack>
-
-        <Typography variant="body1">{formattedDate}</Typography>
       </Stack>
     </Container>
   );
