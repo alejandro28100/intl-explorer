@@ -13,20 +13,25 @@ import {
   Radio,
 } from "@mui/material";
 
-import { DATE_STYLES, TIME_STYLES, LOCALES } from "../../data";
+import { DATE_STYLES, TIME_STYLES, LOCALES, DAY_PERIODS } from "../../data";
 
 type TDateStyle = "full" | "long" | "medium" | "short";
 type TTimeStyle = "full" | "long" | "medium" | "short";
+type TDayPeriod = "narrow" | "short" | "long";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
   const [locale, setLocale] = React.useState("en-US");
   const [dateStyle, setDateStyle] = React.useState<TDateStyle | undefined>();
   const [timeStyle, setTimeStyle] = React.useState<TTimeStyle | undefined>();
+  const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod | undefined>(
+    undefined
+  );
 
   const formattedDate = new Intl.DateTimeFormat(locale, {
     dateStyle,
     timeStyle,
+    dayPeriod,
   }).format(date);
 
   React.useEffect(() => {
@@ -40,6 +45,7 @@ function DateTimeFormat() {
   const options = {
     ...(dateStyle && { dateStyle }),
     ...(timeStyle && { timeStyle }),
+    ...(dayPeriod && { dayPeriod }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -106,6 +112,23 @@ function DateTimeFormat() {
                     value={value}
                     control={<Radio />}
                     label={value}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Day period</FormLabel>
+              <RadioGroup
+                row
+                value={dayPeriod}
+                onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
+              >
+                {DAY_PERIODS.map((period) => (
+                  <FormControlLabel
+                    key={period}
+                    value={period}
+                    control={<Radio />}
+                    label={period}
                   />
                 ))}
               </RadioGroup>

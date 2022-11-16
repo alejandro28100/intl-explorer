@@ -10,6 +10,7 @@ const DATE_STYLES = ["full", "long", "medium", "short"];
  */
 const TIME_STYLES = ["full", "long", "medium", "short"];
 
+/**Might be relevant later */
 const CALENDAR = [
   "buddhist",
   "chinese",
@@ -31,4 +32,6 @@ const CALENDAR = [
   "roc",
   "islamic-civil",
 ];
-export { LOCALES, DATE_STYLES, TIME_STYLES, CALENDAR };
+
+const DAY_PERIODS = ["narrow", "short", "long"];
+export { LOCALES, DATE_STYLES, TIME_STYLES, CALENDAR, DAY_PERIODS };
