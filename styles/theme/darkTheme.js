@@ -4,10 +4,13 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#1B1B2F",
+      main: "#f67599",
     },
     secondary: {
-      main: "#1F4068",
+      main: "#99d6ea",
+    },
+    background: {
+      default: "#161821",
     },
   },
 });
