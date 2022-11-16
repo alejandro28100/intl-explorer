@@ -1,4 +1,5 @@
 import LOCALES from "./locales";
+import TIMEZONES from "./timezones";
 
 /** Note: dateStyle can be used with timeStyle,
  * but not with other options (e.g. weekday, hour, month, etc.). */
@@ -34,4 +35,4 @@ const CALENDAR = [
 ];
 
 const DAY_PERIODS = ["narrow", "short", "long"];
-export { LOCALES, DATE_STYLES, TIME_STYLES, CALENDAR, DAY_PERIODS };
+export { LOCALES, DATE_STYLES, TIME_STYLES, CALENDAR, DAY_PERIODS, TIMEZONES };

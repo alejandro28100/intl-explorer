@@ -16,11 +16,19 @@ import {
   FormGroup,
   Switch,
   FormHelperText,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 
 import { ExpandMore } from "@mui/icons-material";
 
-import { DATE_STYLES, TIME_STYLES, LOCALES, DAY_PERIODS } from "../../data";
+import {
+  DATE_STYLES,
+  TIME_STYLES,
+  LOCALES,
+  DAY_PERIODS,
+  TIMEZONES,
+} from "data";
 import { RadioGroup } from "components";
 
 type TDateStyle = "full" | "long" | "medium" | "short";
@@ -35,6 +43,16 @@ function DateTimeFormat() {
   const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod | undefined>(
     undefined
   );
+  const [timeZone, setTimeZone] = React.useState<{
+    timeZone: string;
+    firstLetter: string;
+  }>(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return {
+      timeZone: tz,
+      firstLetter: tz[0].toUpperCase(),
+    };
+  });
   const [hour12, setHour12] = React.useState<boolean | undefined>(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale, {
@@ -42,6 +60,7 @@ function DateTimeFormat() {
     timeStyle,
     dayPeriod,
     hour12,
+    timeZone: timeZone.timeZone,
   }).format(date);
 
   React.useEffect(() => {
@@ -57,6 +76,7 @@ function DateTimeFormat() {
     ...(timeStyle && { timeStyle }),
     ...(dayPeriod && { dayPeriod }),
     ...(hour12 !== undefined && { hour12 }),
+    ...(timeZone && { timeZone: timeZone.timeZone }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -66,6 +86,12 @@ function DateTimeFormat() {
     : "";
   const codeSnippet = `new Intl.DateTimeFormat("${locale}"${optionsSnippet})\n.format( new Date() )`;
 
+  // Add the firstLetter field to each timezone
+  // This is used to group the timezones by the first letter
+  const timezoneOptions = TIMEZONES.map((timeZone) => ({
+    timeZone,
+    firstLetter: timeZone[0].toUpperCase(),
+  }));
   return (
     <Container
       maxWidth="lg"
@@ -96,6 +122,16 @@ function DateTimeFormat() {
                 ))}
               </Select>
             </FormControl>
+            <Autocomplete
+              value={timeZone}
+              options={timezoneOptions}
+              groupBy={(option) => option.firstLetter}
+              getOptionLabel={(option) => option.timeZone}
+              onChange={(e, value) => value && setTimeZone(value)}
+              renderInput={(params) => (
+                <TextField {...params} variant="filled" label="Timezone" />
+              )}
+            />
             <FormGroup>
               <FormControlLabel
                 control={
