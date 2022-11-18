@@ -330,7 +330,18 @@ function DateTimeFormat() {
               </AccordionDetails>
             </Accordion>
           </Stack>
-          <Stack width="50%" justifyContent="space-between" spacing={2}>
+          <Stack
+            width="50%"
+            justifyContent="space-between"
+            spacing={2}
+            sx={{
+              flex: 1,
+              overflowY: "auto",
+              px: 0.5,
+              pr: 2,
+              maxHeight: "80vh",
+            }}
+          >
             <Stack alignItems="center">
               <Typography align="center" component="h1" variant="h4">
                 {formattedDate}
