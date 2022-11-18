@@ -11,7 +11,7 @@ interface IRadioGroupProps {
   label: string;
   value: RadioGroupProps["value"];
   onChange: RadioGroupProps["onChange"];
-  options: (TRadioGroupOptions | number | string)[];
+  options: TRadioGroupOptions[] | readonly (number | string)[];
 }
 
 type TRadioGroupOptions = {
