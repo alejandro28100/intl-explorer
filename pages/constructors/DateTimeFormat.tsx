@@ -39,6 +39,7 @@ import {
   FRACTIONAL_SECOND_DIGITS,
 } from "data";
 import { RadioGroup } from "components";
+import CodeSnippet from "components/CodeSnippet";
 
 type TDateStyle = typeof DATE_STYLES[number];
 type TTimeStyle = typeof TIME_STYLES[number];
@@ -355,9 +356,7 @@ function DateTimeFormat() {
                 overflowY: "auto",
               }}
             >
-              <pre>
-                <code>{codeSnippet}</code>
-              </pre>
+              <CodeSnippet code={codeSnippet} />
             </Stack>
           </Stack>
         </Stack>
