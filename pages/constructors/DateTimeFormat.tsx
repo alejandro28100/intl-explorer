@@ -32,6 +32,7 @@ import {
   YEARS,
   ERAS,
   MONTHS,
+  DAYS,
 } from "data";
 import { RadioGroup } from "components";
 
@@ -42,6 +43,7 @@ type TWeekday = "narrow" | "short" | "long";
 type TYear = "numeric" | "2-digit";
 type TEra = "narrow" | "short" | "long";
 type TMonth = "numeric" | "2-digit" | "narrow" | "short" | "long";
+type TDay = "numeric" | "2-digit";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
@@ -63,6 +65,7 @@ function DateTimeFormat() {
   const [year, setYear] = React.useState<TYear | undefined>(undefined);
   const [era, setEra] = React.useState<TEra | undefined>(undefined);
   const [month, setMonth] = React.useState<TMonth | undefined>(undefined);
+  const [day, setDay] = React.useState<TDay | undefined>(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
@@ -74,6 +77,7 @@ function DateTimeFormat() {
     year,
     era,
     month,
+    day,
   }).format(date);
 
   React.useEffect(() => {
@@ -110,6 +114,7 @@ function DateTimeFormat() {
     ...(year && { year }),
     ...(era && { era }),
     ...(month && { month }),
+    ...(day && { day }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -265,6 +270,12 @@ function DateTimeFormat() {
                   value={month}
                   onChange={(e) => setMonth(e.target.value as TMonth)}
                   options={MONTHS}
+                />
+                <RadioGroup
+                  label="Day"
+                  value={day}
+                  onChange={(e) => setDay(e.target.value as TDay)}
+                  options={DAYS}
                 />
               </AccordionDetails>
             </Accordion>
