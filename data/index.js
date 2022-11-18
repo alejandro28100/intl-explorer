@@ -38,6 +38,8 @@ const DAY_PERIODS = ["narrow", "short", "long"];
 
 const WEEK_DAYS = ["narrow", "short", "long"];
 
+const YEARS = ["numeric", "2-digit"];
+
 export {
   LOCALES,
   DATE_STYLES,
@@ -46,4 +48,5 @@ export {
   DAY_PERIODS,
   TIMEZONES,
   WEEK_DAYS,
+  YEARS,
 };

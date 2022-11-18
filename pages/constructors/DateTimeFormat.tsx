@@ -29,6 +29,7 @@ import {
   DAY_PERIODS,
   TIMEZONES,
   WEEK_DAYS,
+  YEARS,
 } from "data";
 import { RadioGroup } from "components";
 
@@ -36,6 +37,7 @@ type TDateStyle = "full" | "long" | "medium" | "short";
 type TTimeStyle = "full" | "long" | "medium" | "short";
 type TDayPeriod = "narrow" | "short" | "long";
 type TWeekday = "narrow" | "short" | "long";
+type TYear = "numeric" | "2-digit";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
@@ -54,6 +56,7 @@ function DateTimeFormat() {
   });
   const [hour12, setHour12] = React.useState<boolean | undefined>(undefined);
   const [weekday, setWeekday] = React.useState<TWeekday | undefined>(undefined);
+  const [year, setYear] = React.useState<TYear | undefined>(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
@@ -62,6 +65,7 @@ function DateTimeFormat() {
     hour12,
     timeZone: Boolean(timeZone.timeZone) ? timeZone.timeZone : undefined,
     weekday,
+    year,
   }).format(date);
 
   React.useEffect(() => {
@@ -95,6 +99,7 @@ function DateTimeFormat() {
     ...(hour12 !== undefined && { hour12 }),
     ...(timeZone && { timeZone: timeZone.timeZone }),
     ...(weekday && { weekday }),
+    ...(year && { year }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -231,6 +236,13 @@ function DateTimeFormat() {
                   value={weekday}
                   onChange={(e) => setWeekday(e.target.value as TWeekday)}
                   options={WEEK_DAYS}
+                />
+
+                <RadioGroup
+                  label="Year"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value as TYear)}
+                  options={YEARS}
                 />
               </AccordionDetails>
             </Accordion>
