@@ -42,6 +42,8 @@ const YEARS = ["numeric", "2-digit"];
 
 const ERAS = ["narrow", "short", "long"];
 
+const MONTHS = ["numeric", "2-digit", "narrow", "short", "long"];
+
 export {
   LOCALES,
   DATE_STYLES,
@@ -52,4 +54,5 @@ export {
   WEEK_DAYS,
   YEARS,
   ERAS,
+  MONTHS,
 };
