@@ -40,18 +40,18 @@ import {
 } from "data";
 import { RadioGroup } from "components";
 
-type TDateStyle = "full" | "long" | "medium" | "short";
-type TTimeStyle = "full" | "long" | "medium" | "short";
-type TDayPeriod = "narrow" | "short" | "long";
-type TWeekday = "narrow" | "short" | "long";
-type TYear = "numeric" | "2-digit";
-type TEra = "narrow" | "short" | "long";
-type TMonth = "numeric" | "2-digit" | "narrow" | "short" | "long";
-type TDay = "numeric" | "2-digit";
-type THour = "numeric" | "2-digit";
-type TMinute = "numeric" | "2-digit";
-type TSecond = "numeric" | "2-digit";
-type TFractionalSecondDigits = 1 | 2 | 3;
+type TDateStyle = typeof DATE_STYLES[number];
+type TTimeStyle = typeof TIME_STYLES[number];
+type TDayPeriod = typeof DAY_PERIODS[number];
+type TWeekday = typeof WEEK_DAYS[number];
+type TYear = typeof YEARS[number];
+type TEra = typeof ERAS[number];
+type TMonth = typeof MONTHS[number];
+type TDay = typeof DAYS[number];
+type THour = typeof HOURS[number];
+type TMinute = typeof MINUTES[number];
+type TSecond = typeof SECONDS[number];
+type TFractionalSecondDigits = typeof FRACTIONAL_SECOND_DIGITS[number];
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());

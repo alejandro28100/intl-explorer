@@ -3,13 +3,13 @@ import TIMEZONES from "./timezones";
 
 /** Note: dateStyle can be used with timeStyle,
  * but not with other options (e.g. weekday, hour, month, etc.). */
-const DATE_STYLES = ["full", "long", "medium", "short"];
+const DATE_STYLES = ["full", "long", "medium", "short"] as const;
 
 /**
  * Note: timeStyle can be used with dateStyle,
  * but not with other options (e.g. weekday, hour, month, etc.).
  */
-const TIME_STYLES = ["full", "long", "medium", "short"];
+const TIME_STYLES = ["full", "long", "medium", "short"] as const;
 
 /**Might be relevant later */
 const CALENDAR = [
@@ -32,27 +32,27 @@ const CALENDAR = [
   "persian",
   "roc",
   "islamic-civil",
-];
+] as const;
 
-const DAY_PERIODS = ["narrow", "short", "long"];
+const DAY_PERIODS = ["narrow", "short", "long"] as const;
 
-const WEEK_DAYS = ["narrow", "short", "long"];
+const WEEK_DAYS = ["narrow", "short", "long"] as const;
 
-const YEARS = ["numeric", "2-digit"];
+const YEARS = ["numeric", "2-digit"] as const;
 
-const ERAS = ["narrow", "short", "long"];
+const ERAS = ["narrow", "short", "long"] as const;
 
-const MONTHS = ["numeric", "2-digit", "narrow", "short", "long"];
+const MONTHS = ["numeric", "2-digit", "narrow", "short", "long"] as const;
 
-const DAYS = ["numeric", "2-digit"];
+const DAYS = ["numeric", "2-digit"] as const;
 
-const HOURS = ["numeric", "2-digit"];
+const HOURS = ["numeric", "2-digit"] as const;
 
-const MINUTES = ["numeric", "2-digit"];
+const MINUTES = ["numeric", "2-digit"] as const;
 
-const SECONDS = ["numeric", "2-digit"];
+const SECONDS = ["numeric", "2-digit"] as const;
 
-const FRACTIONAL_SECOND_DIGITS = [1, 2, 3];
+const FRACTIONAL_SECOND_DIGITS = [1, 2, 3] as const;
 
 export {
   LOCALES,
