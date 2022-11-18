@@ -36,6 +36,7 @@ import {
   HOURS,
   MINUTES,
   SECONDS,
+  FRACTIONAL_SECOND_DIGITS,
 } from "data";
 import { RadioGroup } from "components";
 
@@ -50,6 +51,7 @@ type TDay = "numeric" | "2-digit";
 type THour = "numeric" | "2-digit";
 type TMinute = "numeric" | "2-digit";
 type TSecond = "numeric" | "2-digit";
+type TFractionalSecondDigits = 1 | 2 | 3;
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
@@ -75,6 +77,9 @@ function DateTimeFormat() {
   const [hour, setHour] = React.useState<THour | undefined>(undefined);
   const [minute, setMinute] = React.useState<TMinute | undefined>(undefined);
   const [second, setSecond] = React.useState<TSecond | undefined>(undefined);
+  const [fractionalSecondDigits, setFractionalSecondDigits] = React.useState<
+    TFractionalSecondDigits | undefined
+  >(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
@@ -90,6 +95,7 @@ function DateTimeFormat() {
     hour,
     minute,
     second,
+    fractionalSecondDigits,
   }).format(date);
 
   React.useEffect(() => {
@@ -112,7 +118,7 @@ function DateTimeFormat() {
     // Update the date every second
     const timer = setInterval(() => {
       setDate(new Date());
-    }, 1000);
+    }, 1);
     return () => clearInterval(timer);
   }, []);
 
@@ -130,6 +136,7 @@ function DateTimeFormat() {
     ...(hour && { hour }),
     ...(minute && { minute }),
     ...(second && { second }),
+    ...(fractionalSecondDigits && { fractionalSecondDigits }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -309,6 +316,16 @@ function DateTimeFormat() {
                   value={second}
                   onChange={(e) => setSecond(e.target.value as TSecond)}
                   options={SECONDS}
+                />
+                <RadioGroup
+                  label="Fractional Second Digits"
+                  value={fractionalSecondDigits}
+                  onChange={(e) =>
+                    setFractionalSecondDigits(
+                      Number(e.target.value) as TFractionalSecondDigits
+                    )
+                  }
+                  options={FRACTIONAL_SECOND_DIGITS}
                 />
               </AccordionDetails>
             </Accordion>

@@ -52,6 +52,8 @@ const MINUTES = ["numeric", "2-digit"];
 
 const SECONDS = ["numeric", "2-digit"];
 
+const FRACTIONAL_SECOND_DIGITS = [1, 2, 3];
+
 export {
   LOCALES,
   DATE_STYLES,
@@ -67,4 +69,5 @@ export {
   HOURS,
   MINUTES,
   SECONDS,
+  FRACTIONAL_SECOND_DIGITS,
 };
