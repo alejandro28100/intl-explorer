@@ -50,6 +50,8 @@ const HOURS = ["numeric", "2-digit"];
 
 const MINUTES = ["numeric", "2-digit"];
 
+const SECONDS = ["numeric", "2-digit"];
+
 export {
   LOCALES,
   DATE_STYLES,
@@ -64,4 +66,5 @@ export {
   DAYS,
   HOURS,
   MINUTES,
+  SECONDS,
 };

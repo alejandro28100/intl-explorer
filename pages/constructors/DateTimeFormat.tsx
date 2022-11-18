@@ -35,6 +35,7 @@ import {
   DAYS,
   HOURS,
   MINUTES,
+  SECONDS,
 } from "data";
 import { RadioGroup } from "components";
 
@@ -48,6 +49,7 @@ type TMonth = "numeric" | "2-digit" | "narrow" | "short" | "long";
 type TDay = "numeric" | "2-digit";
 type THour = "numeric" | "2-digit";
 type TMinute = "numeric" | "2-digit";
+type TSecond = "numeric" | "2-digit";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
@@ -72,6 +74,7 @@ function DateTimeFormat() {
   const [day, setDay] = React.useState<TDay | undefined>(undefined);
   const [hour, setHour] = React.useState<THour | undefined>(undefined);
   const [minute, setMinute] = React.useState<TMinute | undefined>(undefined);
+  const [second, setSecond] = React.useState<TSecond | undefined>(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
@@ -86,6 +89,7 @@ function DateTimeFormat() {
     day,
     hour,
     minute,
+    second,
   }).format(date);
 
   React.useEffect(() => {
@@ -125,6 +129,7 @@ function DateTimeFormat() {
     ...(day && { day }),
     ...(hour && { hour }),
     ...(minute && { minute }),
+    ...(second && { second }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -298,6 +303,12 @@ function DateTimeFormat() {
                   value={minute}
                   onChange={(e) => setMinute(e.target.value as TMinute)}
                   options={MINUTES}
+                />
+                <RadioGroup
+                  label="Second"
+                  value={second}
+                  onChange={(e) => setSecond(e.target.value as TSecond)}
+                  options={SECONDS}
                 />
               </AccordionDetails>
             </Accordion>
