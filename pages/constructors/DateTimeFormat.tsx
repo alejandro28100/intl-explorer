@@ -40,6 +40,7 @@ import {
 } from "data";
 import { RadioGroup } from "components";
 import CodeSnippet from "components/CodeSnippet";
+import { SnackbarProvider } from "notistack";
 
 type TDateStyle = typeof DATE_STYLES[number];
 type TTimeStyle = typeof TIME_STYLES[number];
@@ -154,214 +155,216 @@ function DateTimeFormat() {
     firstLetter: timeZone[0].toUpperCase(),
   }));
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        height: "100vh",
-      }}
-    >
-      <Stack spacing={2} py={4} sx={{ height: "100%" }}>
-        <Typography component="h1" variant="h6">
-          DateTimeFormat
-        </Typography>
-        <Stack spacing={2} direction="row">
-          <Stack
-            sx={{ height: "80vh", overflowY: "auto", px: 0.5, pr: 2 }}
-            flex="1"
-            spacing={2}
-          >
-            <FormControl variant="filled">
-              <InputLabel>Locale</InputLabel>
-              <Select
-                value={locale}
-                onChange={(e) => setLocale(e.target.value)}
-              >
-                {LOCALES.map(([locale, name]) => (
-                  <MenuItem key={locale} value={locale}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Autocomplete
-              value={timeZone}
-              options={timezoneOptions}
-              isOptionEqualToValue={(option, value) =>
-                option.timeZone === value.timeZone
-              }
-              groupBy={(option) => option.firstLetter}
-              getOptionLabel={(option) => option.timeZone}
-              onChange={(e, value) => value && setTimeZone(value)}
-              renderInput={(params) => (
-                <TextField {...params} variant="filled" label="Timezone" />
-              )}
-            />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    value={hour12}
-                    onChange={(e) => setHour12(e.target.checked)}
-                  />
+    <SnackbarProvider>
+      <Container
+        maxWidth="lg"
+        sx={{
+          height: "100vh",
+        }}
+      >
+        <Stack spacing={2} py={4} sx={{ height: "100%" }}>
+          <Typography component="h1" variant="h6">
+            DateTimeFormat
+          </Typography>
+          <Stack spacing={2} direction="row">
+            <Stack
+              sx={{ height: "80vh", overflowY: "auto", px: 0.5, pr: 2 }}
+              flex="1"
+              spacing={2}
+            >
+              <FormControl variant="filled">
+                <InputLabel>Locale</InputLabel>
+                <Select
+                  value={locale}
+                  onChange={(e) => setLocale(e.target.value)}
+                >
+                  {LOCALES.map(([locale, name]) => (
+                    <MenuItem key={locale} value={locale}>
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Autocomplete
+                value={timeZone}
+                options={timezoneOptions}
+                isOptionEqualToValue={(option, value) =>
+                  option.timeZone === value.timeZone
                 }
-                label="Hour 12"
+                groupBy={(option) => option.firstLetter}
+                getOptionLabel={(option) => option.timeZone}
+                onChange={(e, value) => value && setTimeZone(value)}
+                renderInput={(params) => (
+                  <TextField {...params} variant="filled" label="Timezone" />
+                )}
               />
-              <FormHelperText>
-                Whether to use 12-hour time (as opposed to 24-hour time).
-              </FormHelperText>
-            </FormGroup>
-            <Accordion defaultExpanded>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Fast Formatting</Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-              >
-                <RadioGroup
-                  label="Date style"
-                  value={dateStyle}
-                  onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
-                  options={DATE_STYLES}
-                />
-
-                <RadioGroup
-                  label="Time style"
-                  value={timeStyle}
-                  onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
-                  options={TIME_STYLES}
-                />
-
-                <Alert severity="info">
-                  <AlertTitle>Note:</AlertTitle>
-                  <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
-                  <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
-                  <em>hour</em>, <em>month</em> , etc.).
-                </Alert>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Specific Formatting</Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-              >
-                <RadioGroup
-                  label="Day period"
-                  value={dayPeriod}
-                  onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
-                  options={DAY_PERIODS}
-                />
-                <Alert severity="info">
-                  <AlertTitle>Note:</AlertTitle>
-                  This option only has an effect if a 12-hour clock is used.
-                  <br />
-                  Many locales use the same string irrespective of the width
-                  specified.
-                </Alert>
-
-                <RadioGroup
-                  label="Weekday"
-                  value={weekday}
-                  onChange={(e) => setWeekday(e.target.value as TWeekday)}
-                  options={WEEK_DAYS}
-                />
-
-                <RadioGroup
-                  label="Era"
-                  value={era}
-                  onChange={(e) => setEra(e.target.value as TEra)}
-                  options={ERAS}
-                />
-                <RadioGroup
-                  label="Year"
-                  value={year}
-                  onChange={(e) => setYear(e.target.value as TYear)}
-                  options={YEARS}
-                />
-                <RadioGroup
-                  label="Month"
-                  value={month}
-                  onChange={(e) => setMonth(e.target.value as TMonth)}
-                  options={MONTHS}
-                />
-                <RadioGroup
-                  label="Day"
-                  value={day}
-                  onChange={(e) => setDay(e.target.value as TDay)}
-                  options={DAYS}
-                />
-                <RadioGroup
-                  label="Hour"
-                  value={hour}
-                  onChange={(e) => setHour(e.target.value as THour)}
-                  options={HOURS}
-                />
-                <RadioGroup
-                  label="Minute"
-                  value={minute}
-                  onChange={(e) => setMinute(e.target.value as TMinute)}
-                  options={MINUTES}
-                />
-                <RadioGroup
-                  label="Second"
-                  value={second}
-                  onChange={(e) => setSecond(e.target.value as TSecond)}
-                  options={SECONDS}
-                />
-                <RadioGroup
-                  label="Fractional Second Digits"
-                  value={fractionalSecondDigits}
-                  onChange={(e) =>
-                    setFractionalSecondDigits(
-                      Number(e.target.value) as TFractionalSecondDigits
-                    )
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      value={hour12}
+                      onChange={(e) => setHour12(e.target.checked)}
+                    />
                   }
-                  options={FRACTIONAL_SECOND_DIGITS}
+                  label="Hour 12"
                 />
-              </AccordionDetails>
-            </Accordion>
-          </Stack>
-          <Stack
-            width="50%"
-            justifyContent="space-between"
-            spacing={2}
-            sx={{
-              flex: 1,
-              overflowY: "auto",
-              px: 0.5,
-              pr: 2,
-              maxHeight: "80vh",
-            }}
-          >
-            <Stack alignItems="center">
-              <Typography align="center" component="h1" variant="h4">
-                {formattedDate}
-              </Typography>
+                <FormHelperText>
+                  Whether to use 12-hour time (as opposed to 24-hour time).
+                </FormHelperText>
+              </FormGroup>
+              <Accordion defaultExpanded>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Fast Formatting</Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+                >
+                  <RadioGroup
+                    label="Date style"
+                    value={dateStyle}
+                    onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
+                    options={DATE_STYLES}
+                  />
+
+                  <RadioGroup
+                    label="Time style"
+                    value={timeStyle}
+                    onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
+                    options={TIME_STYLES}
+                  />
+
+                  <Alert severity="info">
+                    <AlertTitle>Note:</AlertTitle>
+                    <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
+                    <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
+                    <em>hour</em>, <em>month</em> , etc.).
+                  </Alert>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Specific Formatting</Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+                >
+                  <RadioGroup
+                    label="Day period"
+                    value={dayPeriod}
+                    onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
+                    options={DAY_PERIODS}
+                  />
+                  <Alert severity="info">
+                    <AlertTitle>Note:</AlertTitle>
+                    This option only has an effect if a 12-hour clock is used.
+                    <br />
+                    Many locales use the same string irrespective of the width
+                    specified.
+                  </Alert>
+
+                  <RadioGroup
+                    label="Weekday"
+                    value={weekday}
+                    onChange={(e) => setWeekday(e.target.value as TWeekday)}
+                    options={WEEK_DAYS}
+                  />
+
+                  <RadioGroup
+                    label="Era"
+                    value={era}
+                    onChange={(e) => setEra(e.target.value as TEra)}
+                    options={ERAS}
+                  />
+                  <RadioGroup
+                    label="Year"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value as TYear)}
+                    options={YEARS}
+                  />
+                  <RadioGroup
+                    label="Month"
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value as TMonth)}
+                    options={MONTHS}
+                  />
+                  <RadioGroup
+                    label="Day"
+                    value={day}
+                    onChange={(e) => setDay(e.target.value as TDay)}
+                    options={DAYS}
+                  />
+                  <RadioGroup
+                    label="Hour"
+                    value={hour}
+                    onChange={(e) => setHour(e.target.value as THour)}
+                    options={HOURS}
+                  />
+                  <RadioGroup
+                    label="Minute"
+                    value={minute}
+                    onChange={(e) => setMinute(e.target.value as TMinute)}
+                    options={MINUTES}
+                  />
+                  <RadioGroup
+                    label="Second"
+                    value={second}
+                    onChange={(e) => setSecond(e.target.value as TSecond)}
+                    options={SECONDS}
+                  />
+                  <RadioGroup
+                    label="Fractional Second Digits"
+                    value={fractionalSecondDigits}
+                    onChange={(e) =>
+                      setFractionalSecondDigits(
+                        Number(e.target.value) as TFractionalSecondDigits
+                      )
+                    }
+                    options={FRACTIONAL_SECOND_DIGITS}
+                  />
+                </AccordionDetails>
+              </Accordion>
             </Stack>
             <Stack
+              width="50%"
+              justifyContent="space-between"
+              spacing={2}
               sx={{
-                p: 2,
-                border: "solid 1px",
                 flex: 1,
                 overflowY: "auto",
+                px: 0.5,
+                pr: 2,
+                maxHeight: "80vh",
               }}
             >
-              <CodeSnippet code={codeSnippet} />
+              <Stack alignItems="center">
+                <Typography align="center" component="h1" variant="h4">
+                  {formattedDate}
+                </Typography>
+              </Stack>
+              <Stack
+                sx={{
+                  p: 2,
+                  border: "solid 1px",
+                  flex: 1,
+                  overflowY: "auto",
+                }}
+              >
+                <CodeSnippet code={codeSnippet} />
+              </Stack>
             </Stack>
           </Stack>
         </Stack>
-      </Stack>
-    </Container>
+      </Container>
+    </SnackbarProvider>
   );
 }
 

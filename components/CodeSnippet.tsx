@@ -1,5 +1,6 @@
 import { ContentCopy } from "@mui/icons-material";
 import { IconButton, Stack, Tooltip } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 interface CodeSnippetProps {
   code: string;
@@ -7,9 +8,17 @@ interface CodeSnippetProps {
 
 function CodeSnippet(props: CodeSnippetProps) {
   const { code } = props;
+  const { enqueueSnackbar } = useSnackbar();
 
-  function handleCopyTextToClipboard() {
-    return navigator.clipboard.writeText(code);
+  async function handleCopyTextToClipboard() {
+    try {
+      await navigator.clipboard.writeText(code);
+      enqueueSnackbar("Copied to clipboard", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("Copying to clipboard not supported :( ", {
+        variant: "error",
+      });
+    }
   }
   return (
     <Stack sx={{ position: "relative", width: "100%", height: "100%" }}>
