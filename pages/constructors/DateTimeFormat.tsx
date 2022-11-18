@@ -290,7 +290,7 @@ function DateTimeFormat() {
                 <RadioGroup
                   label="Hour"
                   value={hour}
-                  onChange={(e) => setHour(e.target.value as TDay)}
+                  onChange={(e) => setHour(e.target.value as THour)}
                   options={HOURS}
                 />
                 <RadioGroup
