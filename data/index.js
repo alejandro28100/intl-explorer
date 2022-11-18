@@ -35,4 +35,15 @@ const CALENDAR = [
 ];
 
 const DAY_PERIODS = ["narrow", "short", "long"];
-export { LOCALES, DATE_STYLES, TIME_STYLES, CALENDAR, DAY_PERIODS, TIMEZONES };
+
+const WEEK_DAYS = ["narrow", "short", "long"];
+
+export {
+  LOCALES,
+  DATE_STYLES,
+  TIME_STYLES,
+  CALENDAR,
+  DAY_PERIODS,
+  TIMEZONES,
+  WEEK_DAYS,
+};

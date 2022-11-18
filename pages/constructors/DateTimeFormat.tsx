@@ -28,12 +28,14 @@ import {
   LOCALES,
   DAY_PERIODS,
   TIMEZONES,
+  WEEK_DAYS,
 } from "data";
 import { RadioGroup } from "components";
 
 type TDateStyle = "full" | "long" | "medium" | "short";
 type TTimeStyle = "full" | "long" | "medium" | "short";
 type TDayPeriod = "narrow" | "short" | "long";
+type TWeekday = "narrow" | "short" | "long";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
@@ -51,6 +53,7 @@ function DateTimeFormat() {
     firstLetter: "",
   });
   const [hour12, setHour12] = React.useState<boolean | undefined>(undefined);
+  const [weekday, setWeekday] = React.useState<TWeekday | undefined>(undefined);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle,
@@ -58,6 +61,7 @@ function DateTimeFormat() {
     dayPeriod,
     hour12,
     timeZone: Boolean(timeZone.timeZone) ? timeZone.timeZone : undefined,
+    weekday,
   }).format(date);
 
   React.useEffect(() => {
@@ -90,6 +94,7 @@ function DateTimeFormat() {
     ...(dayPeriod && { dayPeriod }),
     ...(hour12 !== undefined && { hour12 }),
     ...(timeZone && { timeZone: timeZone.timeZone }),
+    ...(weekday && { weekday }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -212,6 +217,20 @@ function DateTimeFormat() {
                   value={dayPeriod}
                   onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
                   options={DAY_PERIODS}
+                />
+                <Alert severity="info">
+                  <AlertTitle>Note:</AlertTitle>
+                  This option only has an effect if a 12-hour clock is used.
+                  <br />
+                  Many locales use the same string irrespective of the width
+                  specified.
+                </Alert>
+
+                <RadioGroup
+                  label="Weekday"
+                  value={weekday}
+                  onChange={(e) => setWeekday(e.target.value as TWeekday)}
+                  options={WEEK_DAYS}
                 />
               </AccordionDetails>
             </Accordion>
