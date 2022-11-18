@@ -40,6 +40,8 @@ const WEEK_DAYS = ["narrow", "short", "long"];
 
 const YEARS = ["numeric", "2-digit"];
 
+const ERAS = ["narrow", "short", "long"];
+
 export {
   LOCALES,
   DATE_STYLES,
@@ -49,4 +51,5 @@ export {
   TIMEZONES,
   WEEK_DAYS,
   YEARS,
+  ERAS,
 };
