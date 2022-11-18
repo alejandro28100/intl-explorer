@@ -11,7 +11,7 @@ interface IRadioGroupProps {
   label: string;
   value: RadioGroupProps["value"];
   onChange: RadioGroupProps["onChange"];
-  options: (TRadioGroupOptions | string)[];
+  options: (TRadioGroupOptions | number | string)[];
 }
 
 type TRadioGroupOptions = {
@@ -32,7 +32,7 @@ function RadioGroup({
       <MUIRadioGroup row value={value} onChange={onChange}>
         {options.length > 0 &&
           options.map((option) =>
-            typeof option === "string" ? (
+            typeof option !== "object" ? (
               <FormControlLabel
                 key={option}
                 value={option}
