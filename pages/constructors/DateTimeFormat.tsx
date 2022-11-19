@@ -55,30 +55,88 @@ type TMinute = typeof MINUTES[number] | "none";
 type TSecond = typeof SECONDS[number] | "none";
 type TFractionalSecondDigits = typeof FRACTIONAL_SECOND_DIGITS[number] | "none";
 
-function DateTimeFormat() {
-  const [date, setDate] = React.useState(new Date());
-  const [locale, setLocale] = React.useState<string>("");
-  const [dateStyle, setDateStyle] = React.useState<TDateStyle>("none");
-  const [timeStyle, setTimeStyle] = React.useState<TTimeStyle>("none");
-  const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod>("none");
-  const [timeZone, setTimeZone] = React.useState<{
-    timeZone: string;
-    firstLetter: string;
-  }>({
+type TState = {
+  date: Date;
+  locale: "";
+  dateStyle: TDateStyle;
+  timeStyle: TTimeStyle;
+  dayPeriod: TDayPeriod;
+  timeZone: {
+    timeZone: "";
+    firstLetter: "";
+  };
+  hour12: boolean;
+  weekday: TWeekday;
+  year: TYear;
+  era: TEra;
+  month: TMonth;
+  day: TDay;
+  hour: THour;
+  minute: TMinute;
+  second: TSecond;
+  fractionalSecondDigits: TFractionalSecondDigits;
+};
+
+const initialState: TState = {
+  date: new Date(),
+  locale: "",
+  dateStyle: "none",
+  timeStyle: "none",
+  dayPeriod: "none",
+  timeZone: {
     timeZone: "",
     firstLetter: "",
-  });
-  const [hour12, setHour12] = React.useState<boolean>(false);
-  const [weekday, setWeekday] = React.useState<TWeekday>("none");
-  const [year, setYear] = React.useState<TYear>("none");
-  const [era, setEra] = React.useState<TEra>("none");
-  const [month, setMonth] = React.useState<TMonth>("none");
-  const [day, setDay] = React.useState<TDay>("none");
-  const [hour, setHour] = React.useState<THour>("none");
-  const [minute, setMinute] = React.useState<TMinute>("none");
-  const [second, setSecond] = React.useState<TSecond>("none");
-  const [fractionalSecondDigits, setFractionalSecondDigits] =
-    React.useState<TFractionalSecondDigits>("none");
+  },
+  hour12: false,
+  weekday: "none",
+  year: "none",
+  era: "none",
+  month: "none",
+  day: "none",
+  hour: "none",
+  minute: "none",
+  second: "none",
+  fractionalSecondDigits: "none",
+};
+
+type TAction = TUpdateOption;
+type TUpdateOption = {
+  type: "update-option";
+  payload: { option: string; value: any };
+};
+
+function reducer(state: TState, action: TAction) {
+  switch (action.type) {
+    case "update-option":
+      return {
+        ...state,
+        [action.payload.option]: action.payload.value,
+      };
+  }
+}
+
+function DateTimeFormat() {
+  const [
+    {
+      date,
+      locale,
+      dateStyle,
+      timeStyle,
+      dayPeriod,
+      timeZone,
+      hour12,
+      weekday,
+      year,
+      era,
+      month,
+      day,
+      fractionalSecondDigits,
+      hour,
+      minute,
+      second,
+    },
+    dispatch,
+  ] = React.useReducer(reducer, initialState);
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
     dateStyle: dateStyle === "none" ? undefined : dateStyle,
@@ -102,22 +160,40 @@ function DateTimeFormat() {
     // Set some default values based on the detected device
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (tz) {
-      setTimeZone({
-        timeZone: tz,
-        firstLetter: tz[0].toUpperCase(),
+      dispatch({
+        type: "update-option",
+        payload: {
+          option: "timeZone",
+          value: {
+            timeZone: tz,
+            firstLetter: tz[0],
+          },
+        },
       });
     }
 
     const deviceLanguage = navigator.language;
     if (deviceLanguage) {
-      setLocale(deviceLanguage);
+      dispatch({
+        type: "update-option",
+        payload: {
+          option: "locale",
+          value: deviceLanguage,
+        },
+      });
     }
     console.log("deviceLanguage", deviceLanguage);
     console.log("tz", tz);
 
     // Update the date every second
     const timer = setInterval(() => {
-      setDate(new Date());
+      dispatch({
+        type: "update-option",
+        payload: {
+          option: "date",
+          value: new Date(),
+        },
+      });
     }, 1);
     return () => clearInterval(timer);
   }, []);
@@ -127,7 +203,9 @@ function DateTimeFormat() {
     ...(timeStyle && timeStyle !== "none" && { timeStyle }),
     ...(dayPeriod && dayPeriod !== "none" && { dayPeriod }),
     ...(hour12 && { hour12 }),
-    ...(timeZone && timeZone.timeZone && { timeZone: timeZone.timeZone }),
+    ...(timeZone && timeZone.timeZone
+      ? { timeZone: timeZone.timeZone }
+      : undefined),
     ...(weekday && weekday !== "none" && { weekday }),
     ...(year && year !== "none" && { year }),
     ...(era && era !== "none" && { era }),
@@ -175,7 +253,15 @@ function DateTimeFormat() {
                 <InputLabel>Locale</InputLabel>
                 <Select
                   value={locale}
-                  onChange={(e) => setLocale(e.target.value)}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "locale",
+                        value: e.target.value,
+                      },
+                    })
+                  }
                 >
                   {LOCALES.map(([locale, name]) => (
                     <MenuItem key={locale} value={locale}>
@@ -192,7 +278,16 @@ function DateTimeFormat() {
                 }
                 groupBy={(option) => option.firstLetter}
                 getOptionLabel={(option) => option.timeZone}
-                onChange={(e, value) => value && setTimeZone(value)}
+                onChange={(e, value) =>
+                  value &&
+                  dispatch({
+                    type: "update-option",
+                    payload: {
+                      option: "timeZone",
+                      value,
+                    },
+                  })
+                }
                 renderInput={(params) => (
                   <TextField {...params} variant="filled" label="Timezone" />
                 )}
@@ -202,7 +297,15 @@ function DateTimeFormat() {
                   control={
                     <Switch
                       value={hour12}
-                      onChange={(e) => setHour12(e.target.checked)}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "update-option",
+                          payload: {
+                            option: "hour12",
+                            value: e.target.checked,
+                          },
+                        })
+                      }
                     />
                   }
                   label="Hour 12"
@@ -226,7 +329,15 @@ function DateTimeFormat() {
                     label="Date style"
                     helperText="The date formatting style to use when calling format()."
                     value={dateStyle}
-                    onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "dateStyle",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...DATE_STYLES, "none"]}
                   />
 
@@ -234,7 +345,15 @@ function DateTimeFormat() {
                     label="Time style"
                     helperText="The time formatting style to use when calling format()."
                     value={timeStyle}
-                    onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "timeStyle",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...TIME_STYLES, "none"]}
                   />
 
@@ -262,7 +381,15 @@ function DateTimeFormat() {
                     label="Day period"
                     helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
                     value={dayPeriod}
-                    onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "dayPeriod",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...DAY_PERIODS, "none"]}
                   />
                   <Alert severity="info">
@@ -277,7 +404,15 @@ function DateTimeFormat() {
                     label="Weekday"
                     helperText="The representation of the weekday."
                     value={weekday}
-                    onChange={(e) => setWeekday(e.target.value as TWeekday)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "weekday",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...WEEK_DAYS, "none"]}
                   />
 
@@ -285,49 +420,105 @@ function DateTimeFormat() {
                     label="Era"
                     helperText="The representation of the era."
                     value={era}
-                    onChange={(e) => setEra(e.target.value as TEra)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "era",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...ERAS, "none"]}
                   />
                   <RadioGroup
                     label="Year"
                     helperText="The representation of the year."
                     value={year}
-                    onChange={(e) => setYear(e.target.value as TYear)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "year",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...YEARS, "none"]}
                   />
                   <RadioGroup
                     label="Month"
                     helperText="The representation of the month."
                     value={month}
-                    onChange={(e) => setMonth(e.target.value as TMonth)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "month",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...MONTHS, "none"]}
                   />
                   <RadioGroup
                     label="Day"
                     helperText="The representation of the day."
                     value={day}
-                    onChange={(e) => setDay(e.target.value as TDay)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "day",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...DAYS, "none"]}
                   />
                   <RadioGroup
                     label="Hour"
                     helperText="The representation of the hour."
                     value={hour}
-                    onChange={(e) => setHour(e.target.value as THour)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "hour",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...HOURS, "none"]}
                   />
                   <RadioGroup
                     label="Minute"
                     helperText="The representation of the minute."
                     value={minute}
-                    onChange={(e) => setMinute(e.target.value as TMinute)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "minute",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...MINUTES, "none"]}
                   />
                   <RadioGroup
                     label="Second"
                     helperText="The representation of the second."
                     value={second}
-                    onChange={(e) => setSecond(e.target.value as TSecond)}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "second",
+                          value: e.target.value,
+                        },
+                      })
+                    }
                     options={[...SECONDS, "none"]}
                   />
                   <RadioGroup
@@ -335,13 +526,16 @@ function DateTimeFormat() {
                     helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
                     value={fractionalSecondDigits}
                     onChange={(e) =>
-                      e.target.value === "none"
-                        ? setFractionalSecondDigits(
-                            e.target.value as TFractionalSecondDigits
-                          )
-                        : setFractionalSecondDigits(
-                            parseInt(e.target.value) as TFractionalSecondDigits
-                          )
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "fractionalSecondDigits",
+                          value:
+                            e.target.value === "none"
+                              ? e.target.value
+                              : Number(e.target.value),
+                        },
+                      })
                     }
                     options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
                   />
