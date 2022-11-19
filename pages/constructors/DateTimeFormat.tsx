@@ -224,6 +224,7 @@ function DateTimeFormat() {
                 >
                   <RadioGroup
                     label="Date style"
+                    helperText="The date formatting style to use when calling format()."
                     value={dateStyle}
                     onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
                     options={[...DATE_STYLES, "none"]}
@@ -231,6 +232,7 @@ function DateTimeFormat() {
 
                   <RadioGroup
                     label="Time style"
+                    helperText="The time formatting style to use when calling format()."
                     value={timeStyle}
                     onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
                     options={[...TIME_STYLES, "none"]}
@@ -258,6 +260,7 @@ function DateTimeFormat() {
                 >
                   <RadioGroup
                     label="Day period"
+                    helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
                     value={dayPeriod}
                     onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
                     options={[...DAY_PERIODS, "none"]}
@@ -272,6 +275,7 @@ function DateTimeFormat() {
 
                   <RadioGroup
                     label="Weekday"
+                    helperText="The representation of the weekday."
                     value={weekday}
                     onChange={(e) => setWeekday(e.target.value as TWeekday)}
                     options={[...WEEK_DAYS, "none"]}
@@ -279,48 +283,56 @@ function DateTimeFormat() {
 
                   <RadioGroup
                     label="Era"
+                    helperText="The representation of the era."
                     value={era}
                     onChange={(e) => setEra(e.target.value as TEra)}
                     options={[...ERAS, "none"]}
                   />
                   <RadioGroup
                     label="Year"
+                    helperText="The representation of the year."
                     value={year}
                     onChange={(e) => setYear(e.target.value as TYear)}
                     options={[...YEARS, "none"]}
                   />
                   <RadioGroup
                     label="Month"
+                    helperText="The representation of the month."
                     value={month}
                     onChange={(e) => setMonth(e.target.value as TMonth)}
                     options={[...MONTHS, "none"]}
                   />
                   <RadioGroup
                     label="Day"
+                    helperText="The representation of the day."
                     value={day}
                     onChange={(e) => setDay(e.target.value as TDay)}
                     options={[...DAYS, "none"]}
                   />
                   <RadioGroup
                     label="Hour"
+                    helperText="The representation of the hour."
                     value={hour}
                     onChange={(e) => setHour(e.target.value as THour)}
                     options={[...HOURS, "none"]}
                   />
                   <RadioGroup
                     label="Minute"
+                    helperText="The representation of the minute."
                     value={minute}
                     onChange={(e) => setMinute(e.target.value as TMinute)}
                     options={[...MINUTES, "none"]}
                   />
                   <RadioGroup
                     label="Second"
+                    helperText="The representation of the second."
                     value={second}
                     onChange={(e) => setSecond(e.target.value as TSecond)}
                     options={[...SECONDS, "none"]}
                   />
                   <RadioGroup
                     label="Fractional Second Digits"
+                    helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
                     value={fractionalSecondDigits}
                     onChange={(e) =>
                       e.target.value === "none"
