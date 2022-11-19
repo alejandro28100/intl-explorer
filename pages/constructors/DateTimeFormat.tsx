@@ -42,27 +42,25 @@ import { RadioGroup } from "components";
 import CodeSnippet from "components/CodeSnippet";
 import { SnackbarProvider } from "notistack";
 
-type TDateStyle = typeof DATE_STYLES[number];
-type TTimeStyle = typeof TIME_STYLES[number];
-type TDayPeriod = typeof DAY_PERIODS[number];
-type TWeekday = typeof WEEK_DAYS[number];
-type TYear = typeof YEARS[number];
-type TEra = typeof ERAS[number];
-type TMonth = typeof MONTHS[number];
-type TDay = typeof DAYS[number];
-type THour = typeof HOURS[number];
-type TMinute = typeof MINUTES[number];
-type TSecond = typeof SECONDS[number];
-type TFractionalSecondDigits = typeof FRACTIONAL_SECOND_DIGITS[number];
+type TDateStyle = typeof DATE_STYLES[number] | "none";
+type TTimeStyle = typeof TIME_STYLES[number] | "none";
+type TDayPeriod = typeof DAY_PERIODS[number] | "none";
+type TWeekday = typeof WEEK_DAYS[number] | "none";
+type TYear = typeof YEARS[number] | "none";
+type TEra = typeof ERAS[number] | "none";
+type TMonth = typeof MONTHS[number] | "none";
+type TDay = typeof DAYS[number] | "none";
+type THour = typeof HOURS[number] | "none";
+type TMinute = typeof MINUTES[number] | "none";
+type TSecond = typeof SECONDS[number] | "none";
+type TFractionalSecondDigits = typeof FRACTIONAL_SECOND_DIGITS[number] | "none";
 
 function DateTimeFormat() {
   const [date, setDate] = React.useState(new Date());
   const [locale, setLocale] = React.useState<string>("");
-  const [dateStyle, setDateStyle] = React.useState<TDateStyle | undefined>();
-  const [timeStyle, setTimeStyle] = React.useState<TTimeStyle | undefined>();
-  const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod | undefined>(
-    undefined
-  );
+  const [dateStyle, setDateStyle] = React.useState<TDateStyle>("none");
+  const [timeStyle, setTimeStyle] = React.useState<TTimeStyle>("none");
+  const [dayPeriod, setDayPeriod] = React.useState<TDayPeriod>("none");
   const [timeZone, setTimeZone] = React.useState<{
     timeZone: string;
     firstLetter: string;
@@ -70,34 +68,34 @@ function DateTimeFormat() {
     timeZone: "",
     firstLetter: "",
   });
-  const [hour12, setHour12] = React.useState<boolean | undefined>(undefined);
-  const [weekday, setWeekday] = React.useState<TWeekday | undefined>(undefined);
-  const [year, setYear] = React.useState<TYear | undefined>(undefined);
-  const [era, setEra] = React.useState<TEra | undefined>(undefined);
-  const [month, setMonth] = React.useState<TMonth | undefined>(undefined);
-  const [day, setDay] = React.useState<TDay | undefined>(undefined);
-  const [hour, setHour] = React.useState<THour | undefined>(undefined);
-  const [minute, setMinute] = React.useState<TMinute | undefined>(undefined);
-  const [second, setSecond] = React.useState<TSecond | undefined>(undefined);
-  const [fractionalSecondDigits, setFractionalSecondDigits] = React.useState<
-    TFractionalSecondDigits | undefined
-  >(undefined);
+  const [hour12, setHour12] = React.useState<boolean>(false);
+  const [weekday, setWeekday] = React.useState<TWeekday>("none");
+  const [year, setYear] = React.useState<TYear>("none");
+  const [era, setEra] = React.useState<TEra>("none");
+  const [month, setMonth] = React.useState<TMonth>("none");
+  const [day, setDay] = React.useState<TDay>("none");
+  const [hour, setHour] = React.useState<THour>("none");
+  const [minute, setMinute] = React.useState<TMinute>("none");
+  const [second, setSecond] = React.useState<TSecond>("none");
+  const [fractionalSecondDigits, setFractionalSecondDigits] =
+    React.useState<TFractionalSecondDigits>("none");
 
   const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
-    dateStyle,
-    timeStyle,
-    dayPeriod,
+    dateStyle: dateStyle === "none" ? undefined : dateStyle,
+    timeStyle: timeStyle === "none" ? undefined : timeStyle,
+    dayPeriod: dayPeriod === "none" ? undefined : dayPeriod,
     hour12,
     timeZone: Boolean(timeZone.timeZone) ? timeZone.timeZone : undefined,
-    weekday,
-    year,
-    era,
-    month,
-    day,
-    hour,
-    minute,
-    second,
-    fractionalSecondDigits,
+    weekday: weekday === "none" ? undefined : weekday,
+    year: year === "none" ? undefined : year,
+    era: era === "none" ? undefined : era,
+    month: month === "none" ? undefined : month,
+    day: day === "none" ? undefined : day,
+    hour: hour === "none" ? undefined : hour,
+    minute: minute === "none" ? undefined : minute,
+    second: second === "none" ? undefined : second,
+    fractionalSecondDigits:
+      fractionalSecondDigits === "none" ? undefined : fractionalSecondDigits,
   }).format(date);
 
   React.useEffect(() => {
@@ -125,20 +123,21 @@ function DateTimeFormat() {
   }, []);
 
   const options = {
-    ...(dateStyle && { dateStyle }),
-    ...(timeStyle && { timeStyle }),
-    ...(dayPeriod && { dayPeriod }),
-    ...(hour12 !== undefined && { hour12 }),
-    ...(timeZone && { timeZone: timeZone.timeZone }),
-    ...(weekday && { weekday }),
-    ...(year && { year }),
-    ...(era && { era }),
-    ...(month && { month }),
-    ...(day && { day }),
-    ...(hour && { hour }),
-    ...(minute && { minute }),
-    ...(second && { second }),
-    ...(fractionalSecondDigits && { fractionalSecondDigits }),
+    ...(dateStyle && dateStyle !== "none" && { dateStyle }),
+    ...(timeStyle && timeStyle !== "none" && { timeStyle }),
+    ...(dayPeriod && dayPeriod !== "none" && { dayPeriod }),
+    ...(hour12 && { hour12 }),
+    ...(timeZone && timeZone.timeZone && { timeZone: timeZone.timeZone }),
+    ...(weekday && weekday !== "none" && { weekday }),
+    ...(year && year !== "none" && { year }),
+    ...(era && era !== "none" && { era }),
+    ...(month && month !== "none" && { month }),
+    ...(day && day !== "none" && { day }),
+    ...(hour && hour !== "none" && { hour }),
+    ...(minute && minute !== "none" && { minute }),
+    ...(second && second !== "none" && { second }),
+    ...(fractionalSecondDigits &&
+      fractionalSecondDigits !== "none" && { fractionalSecondDigits }),
   };
 
   const hasOptions = Object.keys(options).length > 0;
@@ -227,14 +226,14 @@ function DateTimeFormat() {
                     label="Date style"
                     value={dateStyle}
                     onChange={(e) => setDateStyle(e.target.value as TDateStyle)}
-                    options={DATE_STYLES}
+                    options={[...DATE_STYLES, "none"]}
                   />
 
                   <RadioGroup
                     label="Time style"
                     value={timeStyle}
                     onChange={(e) => setTimeStyle(e.target.value as TTimeStyle)}
-                    options={TIME_STYLES}
+                    options={[...TIME_STYLES, "none"]}
                   />
 
                   <Alert severity="info">
@@ -261,7 +260,7 @@ function DateTimeFormat() {
                     label="Day period"
                     value={dayPeriod}
                     onChange={(e) => setDayPeriod(e.target.value as TDayPeriod)}
-                    options={DAY_PERIODS}
+                    options={[...DAY_PERIODS, "none"]}
                   />
                   <Alert severity="info">
                     <AlertTitle>Note:</AlertTitle>
@@ -275,60 +274,64 @@ function DateTimeFormat() {
                     label="Weekday"
                     value={weekday}
                     onChange={(e) => setWeekday(e.target.value as TWeekday)}
-                    options={WEEK_DAYS}
+                    options={[...WEEK_DAYS, "none"]}
                   />
 
                   <RadioGroup
                     label="Era"
                     value={era}
                     onChange={(e) => setEra(e.target.value as TEra)}
-                    options={ERAS}
+                    options={[...ERAS, "none"]}
                   />
                   <RadioGroup
                     label="Year"
                     value={year}
                     onChange={(e) => setYear(e.target.value as TYear)}
-                    options={YEARS}
+                    options={[...YEARS, "none"]}
                   />
                   <RadioGroup
                     label="Month"
                     value={month}
                     onChange={(e) => setMonth(e.target.value as TMonth)}
-                    options={MONTHS}
+                    options={[...MONTHS, "none"]}
                   />
                   <RadioGroup
                     label="Day"
                     value={day}
                     onChange={(e) => setDay(e.target.value as TDay)}
-                    options={DAYS}
+                    options={[...DAYS, "none"]}
                   />
                   <RadioGroup
                     label="Hour"
                     value={hour}
                     onChange={(e) => setHour(e.target.value as THour)}
-                    options={HOURS}
+                    options={[...HOURS, "none"]}
                   />
                   <RadioGroup
                     label="Minute"
                     value={minute}
                     onChange={(e) => setMinute(e.target.value as TMinute)}
-                    options={MINUTES}
+                    options={[...MINUTES, "none"]}
                   />
                   <RadioGroup
                     label="Second"
                     value={second}
                     onChange={(e) => setSecond(e.target.value as TSecond)}
-                    options={SECONDS}
+                    options={[...SECONDS, "none"]}
                   />
                   <RadioGroup
                     label="Fractional Second Digits"
                     value={fractionalSecondDigits}
                     onChange={(e) =>
-                      setFractionalSecondDigits(
-                        Number(e.target.value) as TFractionalSecondDigits
-                      )
+                      e.target.value === "none"
+                        ? setFractionalSecondDigits(
+                            e.target.value as TFractionalSecondDigits
+                          )
+                        : setFractionalSecondDigits(
+                            parseInt(e.target.value) as TFractionalSecondDigits
+                          )
                     }
-                    options={FRACTIONAL_SECOND_DIGITS}
+                    options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
                   />
                 </AccordionDetails>
               </Accordion>
