@@ -107,11 +107,52 @@ type TUpdateOption = {
 
 function reducer(state: TState, action: TAction) {
   switch (action.type) {
-    case "update-option":
+    case "update-option": {
+      const { option, value } = action.payload;
+
+      const isFastFormattingOption = ["dateStyle", "timeStyle"].includes(
+        option
+      );
+
+      const isCommonOption = ["locale", "hour12", "timeZone"].includes(option);
+      // These options can be used with any of the available options
+      // so we can just update the state wihout afecting the other options
+      if (isCommonOption) {
+        return {
+          ...state,
+          [option]: value,
+        };
+      }
+
+      // Given that dateStyle and timeStyle must be used together and
+      // they cannot be used with certain other options, we need to reset those.
+
+      // We need to preserve the value of the options that can be used along
+      // with dateStyle and timeStyle (locale, hour12, timeZone)
+      if (isFastFormattingOption) {
+        return {
+          ...initialState,
+          locale: state.locale,
+          hour12: state.hour12,
+          timeZone: state.timeZone,
+          dateStyle: option === "dateStyle" ? value : state.dateStyle,
+          timeStyle: option === "timeStyle" ? value : state.timeStyle,
+        };
+      }
+
+      // At this point dateStyle or timeStyle are not being changed so
+      // we have to set their values to "none" to prevent the .format() method
+      // from throwing an error if the user has selected them before.
+
       return {
         ...state,
-        [action.payload.option]: action.payload.value,
+        dateStyle: "none",
+        timeStyle: "none",
+        [option]: action.payload.value,
       };
+    }
+    default:
+      return state;
   }
 }
 
