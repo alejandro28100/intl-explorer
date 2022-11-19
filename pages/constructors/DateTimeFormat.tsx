@@ -351,7 +351,7 @@ function DateTimeFormat() {
             <Stack
               width="50%"
               justifyContent="space-between"
-              spacing={2}
+              spacing={1}
               sx={{
                 flex: 1,
                 overflowY: "auto",
@@ -365,16 +365,8 @@ function DateTimeFormat() {
                   {formattedDate}
                 </Typography>
               </Stack>
-              <Stack
-                sx={{
-                  p: 2,
-                  border: "solid 1px",
-                  flex: 1,
-                  overflowY: "auto",
-                }}
-              >
-                <CodeSnippet code={codeSnippet} />
-              </Stack>
+
+              <CodeSnippet code={codeSnippet} />
             </Stack>
           </Stack>
         </Stack>

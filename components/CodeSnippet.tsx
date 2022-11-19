@@ -1,5 +1,5 @@
 import { ContentCopy } from "@mui/icons-material";
-import { IconButton, Stack, Tooltip } from "@mui/material";
+import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 
 interface CodeSnippetProps {
@@ -21,24 +21,29 @@ function CodeSnippet(props: CodeSnippetProps) {
     }
   }
   return (
-    <Stack sx={{ position: "relative", width: "100%", height: "100%" }}>
-      <Tooltip title="Click to copy the snippet to the clipboard">
-        <IconButton
-          onClick={handleCopyTextToClipboard}
-          size="large"
-          sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-          }}
-        >
-          <ContentCopy />
-        </IconButton>
-      </Tooltip>
-      <pre>
-        <code>{code}</code>
-      </pre>
-    </Stack>
+    <>
+      <Stack alignItems="center" justifyContent="space-between" direction="row">
+        <Typography variant="h6">Code</Typography>
+        <Tooltip title="Click to copy the snippet to the clipboard">
+          <IconButton onClick={handleCopyTextToClipboard} size="large">
+            <ContentCopy />
+          </IconButton>
+        </Tooltip>
+      </Stack>
+      <Stack
+        sx={{
+          p: 1,
+          border: "solid 1px",
+          flex: 1,
+          overflowY: "auto",
+          position: "relative",
+        }}
+      >
+        <pre style={{ margin: 0 }}>
+          <code>{code}</code>
+        </pre>
+      </Stack>
+    </>
   );
 }
 
