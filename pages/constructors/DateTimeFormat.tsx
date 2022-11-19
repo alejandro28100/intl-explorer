@@ -114,7 +114,9 @@ function reducer(state: TState, action: TAction) {
         option
       );
 
-      const isCommonOption = ["locale", "hour12", "timeZone"].includes(option);
+      const isCommonOption = ["locale", "hour12", "timeZone", "date"].includes(
+        option
+      );
       // These options can be used with any of the available options
       // so we can just update the state wihout afecting the other options
       if (isCommonOption) {
@@ -225,8 +227,38 @@ function DateTimeFormat() {
     }
     console.log("deviceLanguage", deviceLanguage);
     console.log("tz", tz);
+  }, []);
 
-    // Update the date every second
+  // This useEffect will set a timeout to update the date
+  // if needed. In case the user selects an option that
+  // requires the date to be updated every certain amount of time
+  // (like milisecond, second, minute etc) we will set a timeout
+  // to update the date.
+  React.useEffect(() => {
+    // If there's no time option selected we don't need to update the date
+    // because the time will not be rendered on the screen, so we can just
+    // return and not set a timeout.
+    if (
+      timeStyle === "none" &&
+      fractionalSecondDigits === "none" &&
+      second === "none" &&
+      minute === "none" &&
+      hour === "none"
+    )
+      return;
+
+    const seconds = fractionalSecondDigits !== "none" ? 0.001 : 1;
+    const interval = seconds * 1000;
+
+    // Update the date inmediately
+    dispatch({
+      type: "update-option",
+      payload: {
+        option: "date",
+        value: new Date(),
+      },
+    });
+    // Set the timer to update the date based on the selected options
     const timer = setInterval(() => {
       dispatch({
         type: "update-option",
@@ -235,9 +267,9 @@ function DateTimeFormat() {
           value: new Date(),
         },
       });
-    }, 1);
+    }, interval);
     return () => clearInterval(timer);
-  }, []);
+  }, [fractionalSecondDigits, second, minute, hour, day, timeStyle]);
 
   const options = {
     ...(dateStyle && dateStyle !== "none" && { dateStyle }),
