@@ -225,8 +225,6 @@ function DateTimeFormat() {
         },
       });
     }
-    console.log("deviceLanguage", deviceLanguage);
-    console.log("tz", tz);
   }, []);
 
   // This useEffect will set a timeout to update the date
