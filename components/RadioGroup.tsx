@@ -8,7 +8,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-interface IRadioGroupProps {
+interface IRadioGroupProps extends RadioGroupProps {
   label: string;
   helperText?: string;
   value: RadioGroupProps["value"];
@@ -28,13 +28,14 @@ function RadioGroup({
   onChange,
   options = [],
   helperText,
+  ...rest
 }: IRadioGroupProps) {
   return (
     <FormControl>
       {label && <FormLabel>{label}</FormLabel>}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
 
-      <MUIRadioGroup row value={value} onChange={onChange}>
+      <MUIRadioGroup {...rest} row value={value} onChange={onChange}>
         {options.length > 0 &&
           options.map((option) =>
             typeof option !== "object" ? (
