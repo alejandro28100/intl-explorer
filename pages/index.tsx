@@ -28,9 +28,7 @@ export default function Home() {
             />
           )}
         </Stack>
-        <Typography variant="body1">
-          {INTL_METHODS[method].description}
-        </Typography>
+        <Typography>{INTL_METHODS[method].description}</Typography>
       </Stack>
     );
   });
@@ -43,13 +41,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Typography component="h1" variant="h2">
-          Explore the Intl API without digging through the web.
+        <Typography component="h1" variant="h3">
+          Explore the Intl API <br /> without getting lost in the docs.
         </Typography>
-        <Typography component="h2" variant="h4">
-          Intl JavaScript API
-        </Typography>
-        <Typography variant="body1">
+        <Typography>
           The <b>Intl</b> object is the namespace for the ECMAScript
           Internationalization API, which provides language sensitive string
           comparison, number formatting, and date and time formatting. The Intl
@@ -57,11 +52,13 @@ export default function Home() {
           functionality common to the internationalization constructors and
           other language sensitive functions.
         </Typography>
-        <Typography component="h2" variant="h4">
-          Constructor properties
-        </Typography>
-        <Stack component="ul" spacing={2}>
-          {methods}
+        <Stack>
+          <Typography component="h2" variant="h5">
+            Constructor properties
+          </Typography>
+          <Stack component="ul" spacing={2}>
+            {methods}
+          </Stack>
         </Stack>
       </Layout>
     </>
