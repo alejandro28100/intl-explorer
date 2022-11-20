@@ -1,56 +1,66 @@
-import { Container, Stack, Typography } from "@mui/material";
+import { Stack, Typography, Link as MUILink, Chip } from "@mui/material";
+import Layout from "components/Layout";
+import { INTL_METHODS } from "data";
 import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
-  const Intl_Methods = {
-    DateTimeFormat: {
-      description:
-        "Constructor for objects that enable language-sensitive date and time formatting.",
-    },
-    NumberFormat: {
-      description:
-        "Constructor for objects that enable language-sensitive number formatting.",
-    },
-  } as { [key: string]: { description: string } };
+  const methods = Object.keys(INTL_METHODS).map((method) => {
+    const methodsAvailable = ["DateTimeFormat"];
+    const isMethodAvailable = methodsAvailable.includes(method);
+    const href = isMethodAvailable
+      ? `/constructors/${encodeURIComponent(method)}`
+      : "/comming-soon";
+    return (
+      <Stack key={method} component="li">
+        <Stack direction="row" spacing={2} alignItems="center">
+          <MUILink underline="hover" variant="h6" component={Link} href={href}>
+            {method}
+          </MUILink>
+          {isMethodAvailable ? (
+            ""
+          ) : (
+            <Chip
+              color="info"
+              size="small"
+              label="Comming soon"
+              variant="outlined"
+            />
+          )}
+        </Stack>
+        <Typography variant="body1">
+          {INTL_METHODS[method].description}
+        </Typography>
+      </Stack>
+    );
+  });
 
   return (
-    <div>
+    <>
       <Head>
-        <title>Intl Visualizer</title>
-        <meta name="description" content="Intl visualizer" />
+        <title>Intl Explorer</title>
+        <meta name="description" content="Intl Explorer" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxWidth="md">
-        <Stack spacing={2} py={4}>
-          <Typography component="h1" variant="h3">
-            Intl Visualizer
-          </Typography>
-          <Typography variant="body1">
-            The Intl object is the namespace for the ECMAScript
-            Internationalization API, which provides language sensitive string
-            comparison, number formatting, and date and time formatting. The
-            Intl object provides access to several constructors as well as
-            functionality common to the internationalization constructors and
-            other language sensitive functions.
-          </Typography>
-          <Typography component="h2" variant="h4">
-            Constructor Properties
-          </Typography>
-          <Stack component="ul">
-            {Object.keys(Intl_Methods).map((method) => (
-              <Stack key={method} component="li">
-                <Link href={`/constructors/${encodeURIComponent(method)}`}>
-                  <Stack>{method}</Stack>
-                </Link>
-                <Typography variant="body1">
-                  {Intl_Methods[method].description}
-                </Typography>
-              </Stack>
-            ))}
-          </Stack>
+      <Layout>
+        <Typography component="h1" variant="h3">
+          Intl - JavaScript
+        </Typography>
+        <Typography variant="body1">
+          The <b>Intl</b> object is the namespace for the ECMAScript
+          Internationalization API, which provides language sensitive string
+          comparison, number formatting, and date and time formatting. The Intl
+          object provides access to several constructors as well as
+          functionality common to the internationalization constructors and
+          other language sensitive functions.
+        </Typography>
+        <Typography component="h2" variant="h4">
+          Constructor properties
+        </Typography>
+        <Stack component="ul" spacing={2}>
+          {methods}
         </Stack>
-      </Container>
-    </div>
+      </Layout>
+    </>
   );
 }

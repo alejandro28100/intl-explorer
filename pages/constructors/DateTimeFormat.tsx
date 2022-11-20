@@ -41,6 +41,7 @@ import {
 import { RadioGroup } from "components";
 import CodeSnippet from "components/CodeSnippet";
 import { SnackbarProvider } from "notistack";
+import Layout from "components/Layout";
 
 type TDateStyle = typeof DATE_STYLES[number] | "none";
 type TTimeStyle = typeof TIME_STYLES[number] | "none";
@@ -304,338 +305,340 @@ function DateTimeFormat() {
   }));
   return (
     <SnackbarProvider>
-      <Container
-        maxWidth="lg"
-        sx={{
-          height: "100vh",
-        }}
-      >
-        <Stack spacing={2} py={4} sx={{ height: "100%" }}>
-          <Typography component="h1" variant="h6">
-            DateTimeFormat
-          </Typography>
-          <Stack spacing={2} direction="row">
-            <Stack
-              sx={{ height: "80vh", overflowY: "auto", px: 0.5, pr: 2 }}
-              flex="1"
-              spacing={2}
-            >
-              <FormControl variant="filled">
-                <InputLabel>Locale</InputLabel>
-                <Select
-                  value={locale}
+      <Layout>
+        <Stack spacing={2} direction="row" justifyContent="space-evenly">
+          <Stack
+            sx={{ height: "80vh", overflowY: "auto", px: 0.5, pr: 2 }}
+            flex="1"
+            spacing={2}
+          >
+            <Typography component="h1" variant="h6">
+              DateTimeFormat
+            </Typography>
+            <Typography variant="body1">
+              Explore the multiple options of the Intl.DateTimeFormat API to see
+              how the date is formatted.
+            </Typography>
+            <FormControl size="small" variant="filled">
+              <InputLabel>Locale</InputLabel>
+              <Select
+                value={locale}
+                onChange={(e) =>
+                  dispatch({
+                    type: "update-option",
+                    payload: {
+                      option: "locale",
+                      value: e.target.value,
+                    },
+                  })
+                }
+              >
+                {LOCALES.map(([locale, name]) => (
+                  <MenuItem key={locale} value={locale}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Autocomplete
+              value={timeZone}
+              options={timezoneOptions}
+              isOptionEqualToValue={(option, value) =>
+                option.timeZone === value.timeZone
+              }
+              groupBy={(option) => option.firstLetter}
+              getOptionLabel={(option) => option.timeZone}
+              onChange={(e, value) =>
+                value &&
+                dispatch({
+                  type: "update-option",
+                  payload: {
+                    option: "timeZone",
+                    value,
+                  },
+                })
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  size="small"
+                  label="Timezone"
+                />
+              )}
+            />
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch
+                    value={hour12}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "update-option",
+                        payload: {
+                          option: "hour12",
+                          value: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                }
+                label="Hour 12"
+              />
+              <FormHelperText>
+                Whether to use 12-hour time (as opposed to 24-hour time).
+              </FormHelperText>
+            </FormGroup>
+            <Accordion defaultExpanded>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Fast Formatting</Typography>
+              </AccordionSummary>
+              <AccordionDetails
+                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+              >
+                <RadioGroup
+                  label="Date style"
+                  helperText="The date formatting style to use when calling format()."
+                  value={dateStyle}
                   onChange={(e) =>
                     dispatch({
                       type: "update-option",
                       payload: {
-                        option: "locale",
+                        option: "dateStyle",
                         value: e.target.value,
                       },
                     })
                   }
-                >
-                  {LOCALES.map(([locale, name]) => (
-                    <MenuItem key={locale} value={locale}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Autocomplete
-                value={timeZone}
-                options={timezoneOptions}
-                isOptionEqualToValue={(option, value) =>
-                  option.timeZone === value.timeZone
-                }
-                groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.timeZone}
-                onChange={(e, value) =>
-                  value &&
-                  dispatch({
-                    type: "update-option",
-                    payload: {
-                      option: "timeZone",
-                      value,
-                    },
-                  })
-                }
-                renderInput={(params) => (
-                  <TextField {...params} variant="filled" label="Timezone" />
-                )}
-              />
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      value={hour12}
-                      onChange={(e) =>
-                        dispatch({
-                          type: "update-option",
-                          payload: {
-                            option: "hour12",
-                            value: e.target.checked,
-                          },
-                        })
-                      }
-                    />
-                  }
-                  label="Hour 12"
+                  options={[...DATE_STYLES, "none"]}
                 />
-                <FormHelperText>
-                  Whether to use 12-hour time (as opposed to 24-hour time).
-                </FormHelperText>
-              </FormGroup>
-              <Accordion defaultExpanded>
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Fast Formatting</Typography>
-                </AccordionSummary>
-                <AccordionDetails
-                  sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-                >
-                  <RadioGroup
-                    label="Date style"
-                    helperText="The date formatting style to use when calling format()."
-                    value={dateStyle}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "dateStyle",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...DATE_STYLES, "none"]}
-                  />
 
-                  <RadioGroup
-                    label="Time style"
-                    helperText="The time formatting style to use when calling format()."
-                    value={timeStyle}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "timeStyle",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...TIME_STYLES, "none"]}
-                  />
+                <RadioGroup
+                  label="Time style"
+                  helperText="The time formatting style to use when calling format()."
+                  value={timeStyle}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "timeStyle",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...TIME_STYLES, "none"]}
+                />
 
-                  <Alert severity="info">
-                    <AlertTitle>Note:</AlertTitle>
-                    <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
-                    <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
-                    <em>hour</em>, <em>month</em> , etc.).
-                  </Alert>
-                </AccordionDetails>
-              </Accordion>
+                <Alert severity="info">
+                  <AlertTitle>Note:</AlertTitle>
+                  <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
+                  <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
+                  <em>hour</em>, <em>month</em> , etc.).
+                </Alert>
+              </AccordionDetails>
+            </Accordion>
 
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Specific Formatting</Typography>
-                </AccordionSummary>
-                <AccordionDetails
-                  sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-                >
-                  <RadioGroup
-                    label="Day period"
-                    helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
-                    value={dayPeriod}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "dayPeriod",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...DAY_PERIODS, "none"]}
-                  />
-                  <Alert severity="info">
-                    <AlertTitle>Note:</AlertTitle>
-                    This option only has an effect if a 12-hour clock is used.
-                    <br />
-                    Many locales use the same string irrespective of the width
-                    specified.
-                  </Alert>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Specific Formatting</Typography>
+              </AccordionSummary>
+              <AccordionDetails
+                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+              >
+                <RadioGroup
+                  label="Day period"
+                  helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
+                  value={dayPeriod}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "dayPeriod",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...DAY_PERIODS, "none"]}
+                />
+                <Alert severity="info">
+                  <AlertTitle>Note:</AlertTitle>
+                  This option only has an effect if a 12-hour clock is used.
+                  <br />
+                  Many locales use the same string irrespective of the width
+                  specified.
+                </Alert>
 
-                  <RadioGroup
-                    label="Weekday"
-                    helperText="The representation of the weekday."
-                    value={weekday}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "weekday",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...WEEK_DAYS, "none"]}
-                  />
+                <RadioGroup
+                  label="Weekday"
+                  helperText="The representation of the weekday."
+                  value={weekday}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "weekday",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...WEEK_DAYS, "none"]}
+                />
 
-                  <RadioGroup
-                    label="Era"
-                    helperText="The representation of the era."
-                    value={era}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "era",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...ERAS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Year"
-                    helperText="The representation of the year."
-                    value={year}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "year",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...YEARS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Month"
-                    helperText="The representation of the month."
-                    value={month}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "month",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...MONTHS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Day"
-                    helperText="The representation of the day."
-                    value={day}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "day",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...DAYS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Hour"
-                    helperText="The representation of the hour."
-                    value={hour}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "hour",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...HOURS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Minute"
-                    helperText="The representation of the minute."
-                    value={minute}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "minute",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...MINUTES, "none"]}
-                  />
-                  <RadioGroup
-                    label="Second"
-                    helperText="The representation of the second."
-                    value={second}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "second",
-                          value: e.target.value,
-                        },
-                      })
-                    }
-                    options={[...SECONDS, "none"]}
-                  />
-                  <RadioGroup
-                    label="Fractional Second Digits"
-                    helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
-                    value={fractionalSecondDigits}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "fractionalSecondDigits",
-                          value:
-                            e.target.value === "none"
-                              ? e.target.value
-                              : Number(e.target.value),
-                        },
-                      })
-                    }
-                    options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
-                  />
-                </AccordionDetails>
-              </Accordion>
+                <RadioGroup
+                  label="Era"
+                  helperText="The representation of the era."
+                  value={era}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "era",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...ERAS, "none"]}
+                />
+                <RadioGroup
+                  label="Year"
+                  helperText="The representation of the year."
+                  value={year}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "year",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...YEARS, "none"]}
+                />
+                <RadioGroup
+                  label="Month"
+                  helperText="The representation of the month."
+                  value={month}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "month",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...MONTHS, "none"]}
+                />
+                <RadioGroup
+                  label="Day"
+                  helperText="The representation of the day."
+                  value={day}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "day",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...DAYS, "none"]}
+                />
+                <RadioGroup
+                  label="Hour"
+                  helperText="The representation of the hour."
+                  value={hour}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "hour",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...HOURS, "none"]}
+                />
+                <RadioGroup
+                  label="Minute"
+                  helperText="The representation of the minute."
+                  value={minute}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "minute",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...MINUTES, "none"]}
+                />
+                <RadioGroup
+                  label="Second"
+                  helperText="The representation of the second."
+                  value={second}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "second",
+                        value: e.target.value,
+                      },
+                    })
+                  }
+                  options={[...SECONDS, "none"]}
+                />
+                <RadioGroup
+                  label="Fractional Second Digits"
+                  helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
+                  value={fractionalSecondDigits}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "fractionalSecondDigits",
+                        value:
+                          e.target.value === "none"
+                            ? e.target.value
+                            : Number(e.target.value),
+                      },
+                    })
+                  }
+                  options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
+                />
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
+          <Stack
+            width="50%"
+            justifyContent="space-between"
+            spacing={1}
+            sx={{
+              flex: 1,
+              overflowY: "auto",
+              px: 0.5,
+              pr: 2,
+              maxHeight: "80vh",
+            }}
+          >
+            <Stack alignItems="center">
+              <Typography align="center" component="h1" variant="h4">
+                {formattedDate}
+              </Typography>
             </Stack>
-            <Stack
-              width="50%"
-              justifyContent="space-between"
-              spacing={1}
-              sx={{
-                flex: 1,
-                overflowY: "auto",
-                px: 0.5,
-                pr: 2,
-                maxHeight: "80vh",
-              }}
-            >
-              <Stack alignItems="center">
-                <Typography align="center" component="h1" variant="h4">
-                  {formattedDate}
-                </Typography>
-              </Stack>
 
-              <CodeSnippet code={codeSnippet} />
-            </Stack>
+            <CodeSnippet code={codeSnippet} />
           </Stack>
         </Stack>
-      </Container>
+      </Layout>
     </SnackbarProvider>
   );
 }
