@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Intl Explorer
 
-## Getting Started
+Table of Contents
 
-First, run the development server:
+[Intro](#intro)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+[Tech Stack](#tech-stack)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[Road Map](#road-map)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Intro
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+When looking for a way to format dates for multiple time zones and many languages, I came across the JavaScript [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl). This API provides date and time formatting capabilities allowing you to customize the language, time zone, and many other things.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Since it is impossible to apply a custom format using this API the same way you can with libraries such as [date-fns](https://github.com/date-fns/date-fns), I build a playground to explore it and get to know it.
 
-## Learn More
+### Tech Stack
+- Next.js
+- TypeScript
+- Vercel as hosting platform
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Road Map
+- [ ] Add the most used Intl methods
+- - [x] DateTimeFormat
+- - [ ] NumberFormat
+- - [ ] ListFormat
+- [ ] Add offline mode
+- [ ] PWA
