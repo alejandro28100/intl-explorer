@@ -1,21 +1,26 @@
 import { Explore } from "@mui/icons-material";
-import { Stack, Icon, Typography } from "@mui/material";
-
+import { Typography, Link as MUILink, IconButton } from "@mui/material";
+import Link from "next/link";
 function Logo() {
   return (
-    <Stack flex="1" direction="row" spacing={2}>
-      <Icon>
-        <Explore />
-      </Icon>
-      <Typography
-        variant="h6"
-        sx={{
-          cursor: "default",
-        }}
-      >
-        Intl Explorer
-      </Typography>
-    </Stack>
+    <MUILink
+      sx={{
+        flex: 1,
+        gap: 2,
+        display: "flex",
+        alignItems: "center",
+        textDecoration: "none",
+        color: "inherit",
+        cursor: "pointer",
+      }}
+      href="/"
+      component={Link}
+    >
+      <IconButton size="large">
+        <Explore fontSize="large" />
+      </IconButton>
+      <Typography variant="h6">Intl Explorer</Typography>
+    </MUILink>
   );
 }
 
