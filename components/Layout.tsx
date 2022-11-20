@@ -1,6 +1,7 @@
 import { Container, ContainerProps, Stack } from "@mui/material";
 import React from "react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 interface ILayoutProps extends ContainerProps {
   children: React.ReactNode;
@@ -30,6 +31,7 @@ export default function Layout({
       >
         {children}
       </Container>
+      <Footer />
     </Stack>
   );
 }
