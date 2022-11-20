@@ -24,6 +24,7 @@ function Navbar() {
       position="sticky"
       top={0}
       width="100%"
+      zIndex={10}
       sx={{
         bgcolor: (theme) => theme.palette.background.paper,
       }}
