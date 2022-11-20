@@ -43,8 +43,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Typography component="h1" variant="h3">
-          Intl - JavaScript
+        <Typography component="h1" variant="h2">
+          Explore the Intl API without digging through the web.
+        </Typography>
+        <Typography component="h2" variant="h4">
+          Intl JavaScript API
         </Typography>
         <Typography variant="body1">
           The <b>Intl</b> object is the namespace for the ECMAScript
