@@ -1,5 +1,6 @@
 import LOCALES from "./locales";
 import TIMEZONES from "./timezones";
+import INTL_METHODS from "./methods";
 
 /** Note: dateStyle can be used with timeStyle,
  * but not with other options (e.g. weekday, hour, month, etc.). */
@@ -70,4 +71,5 @@ export {
   MINUTES,
   SECONDS,
   FRACTIONAL_SECOND_DIGITS,
+  INTL_METHODS,
 };
