@@ -5,7 +5,7 @@ const LOCALES = [
   ["cs-CZ", "Czech (Czech Republic)"],
   ["da-DK", "Danish (Denmark)"],
   ["de-AT", "Austrian German"],
-  ["de-CH", '"Swiss" German'],
+  ["de-CH", "Swiss German"],
   ["de-DE", "Standard German (as spoken in Germany)"],
   ["el-GR", "Modern Greek"],
   ["en-AU", "Australian English"],
@@ -25,13 +25,13 @@ const LOCALES = [
   ["fi-FI", "Finnish (Finland)"],
   ["fr-BE", "Belgian French"],
   ["fr-CA", "Canadian French"],
-  ["fr-CH", '"Swiss" French'],
+  ["fr-CH", "Swiss French"],
   ["fr-FR", "Standard French (especially in France)"],
   ["he-IL", "Hebrew (Israel)"],
   ["hi-IN", "Hindi (India)"],
   ["hu-HU", "Hungarian (Hungary)"],
   ["id-ID", "Indonesian (Indonesia)"],
-  ["it-CH", '"Swiss" Italian'],
+  ["it-CH", "Swiss Italian"],
   ["it-IT", "Standard Italian (as spoken in Italy)"],
   ["ja-JP", "Japanese (Japan)"],
   ["ko-KR", "Korean (Republic of Korea)"],
@@ -52,6 +52,6 @@ const LOCALES = [
   ["zh-CN", "Mainland China, simplified characters"],
   ["zh-HK", "Hong Kong, traditional characters"],
   ["zh-TW", "Taiwan, traditional characters"],
-];
+].sort((a, b) => a[1].localeCompare(b[1]));
 
 export default LOCALES;
