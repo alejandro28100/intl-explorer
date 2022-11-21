@@ -58,7 +58,7 @@ type TFractionalSecondDigits = typeof FRACTIONAL_SECOND_DIGITS[number] | "none";
 
 type TState = {
   date: Date;
-  locale: "";
+  locale: [string, string];
   dateStyle: TDateStyle;
   timeStyle: TTimeStyle;
   dayPeriod: TDayPeriod;
@@ -80,7 +80,12 @@ type TState = {
 
 const initialState: TState = {
   date: new Date(),
-  locale: "",
+  locale: [
+    // locale code
+    "",
+    // locale name
+    "",
+  ],
   dateStyle: "none",
   timeStyle: "none",
   dayPeriod: "none",
@@ -160,29 +165,27 @@ function reducer(state: TState, action: TAction) {
 }
 
 function DateTimeFormat() {
-  const [
-    {
-      date,
-      locale,
-      dateStyle,
-      timeStyle,
-      dayPeriod,
-      timeZone,
-      hour12,
-      weekday,
-      year,
-      era,
-      month,
-      day,
-      fractionalSecondDigits,
-      hour,
-      minute,
-      second,
-    },
-    dispatch,
-  ] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const {
+    date,
+    locale: [localeCode],
+    dateStyle,
+    timeStyle,
+    dayPeriod,
+    timeZone,
+    hour12,
+    weekday,
+    year,
+    era,
+    month,
+    day,
+    fractionalSecondDigits,
+    hour,
+    minute,
+    second,
+  } = state;
 
-  const formattedDate = new Intl.DateTimeFormat(locale || undefined, {
+  const formattedDate = new Intl.DateTimeFormat(localeCode || undefined, {
     dateStyle: dateStyle === "none" ? undefined : dateStyle,
     timeStyle: timeStyle === "none" ? undefined : timeStyle,
     dayPeriod: dayPeriod === "none" ? undefined : dayPeriod,
@@ -217,12 +220,17 @@ function DateTimeFormat() {
     }
 
     const deviceLanguage = navigator.language;
-    if (deviceLanguage) {
+
+    const detectedLocale = LOCALES.find(
+      (locale) => locale[0] === deviceLanguage
+    );
+    console.log({ detectedLocale });
+    if (detectedLocale) {
       dispatch({
         type: "update-option",
         payload: {
           option: "locale",
-          value: deviceLanguage,
+          value: detectedLocale,
         },
       });
     }
@@ -295,7 +303,7 @@ function DateTimeFormat() {
   const optionsSnippet = hasOptions
     ? `,${JSON.stringify(options, null, 2)}`
     : "";
-  const codeSnippet = `new Intl.DateTimeFormat("${locale}"${optionsSnippet})\n.format( new Date() )`;
+  const codeSnippet = `new Intl.DateTimeFormat("${localeCode}"${optionsSnippet})\n.format( new Date() )`;
 
   // Add the firstLetter field to each timezone
   // This is used to group the timezones by the first letter
@@ -319,27 +327,33 @@ function DateTimeFormat() {
               Explore the multiple options of the Intl.DateTimeFormat API to see
               how the date is formatted.
             </Typography>
-            <FormControl size="small" variant="filled">
-              <InputLabel>Locale</InputLabel>
-              <Select
-                value={locale}
-                onChange={(e) =>
-                  dispatch({
-                    type: "update-option",
-                    payload: {
-                      option: "locale",
-                      value: e.target.value,
-                    },
-                  })
-                }
-              >
-                {LOCALES.map(([locale, name]) => (
-                  <MenuItem key={locale} value={locale}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+
+            <Autocomplete
+              value={state.locale}
+              options={LOCALES}
+              isOptionEqualToValue={(option, value) => option[0] === value[0]}
+              groupBy={([, name]) => name[0].toUpperCase()}
+              getOptionLabel={(option) => option[1]}
+              onChange={(e, value) =>
+                value &&
+                dispatch({
+                  type: "update-option",
+                  payload: {
+                    option: "locale",
+                    value,
+                  },
+                })
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  size="small"
+                  label="Locale"
+                />
+              )}
+            />
+
             <Autocomplete
               value={timeZone}
               options={timezoneOptions}
