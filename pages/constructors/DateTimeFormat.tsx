@@ -348,244 +348,261 @@ function DateTimeFormat() {
 
   return (
     <SnackbarProvider>
-      <Layout>
-        <Stack spacing={2} direction="row" justifyContent="space-evenly">
-          <Stack
-            sx={{ height: "80vh", overflowY: "auto", px: 0.5, pr: 2 }}
-            flex="1"
-            spacing={2}
-          >
-            <Typography component="h1" variant="h6">
-              DateTimeFormat
-            </Typography>
-            <Typography variant="body1">
-              Explore the multiple options of the Intl.DateTimeFormat API to see
-              how the date is formatted.
-            </Typography>
+      <Layout
+        sx={{
+          spacing: 2,
+          justifyContent: "space-evenly",
+          flexDirection: ["column", "row"],
+        }}
+      >
+        <Stack sx={{ overflowY: "auto", px: 0.5, pr: 2 }} flex="1" spacing={2}>
+          <Typography component="h1" variant="h6">
+            DateTimeFormat
+          </Typography>
+          <Typography variant="body1">
+            Explore the multiple options of the Intl.DateTimeFormat API to see
+            how the date is formatted.
+          </Typography>
 
-            <Autocomplete
-              value={state.locale}
-              options={LOCALES}
-              isOptionEqualToValue={(option, value) => option[0] === value[0]}
-              groupBy={([, name]) => name[0].toUpperCase()}
-              getOptionLabel={(option) => option[1]}
-              onChange={(event, value) =>
-                handleAutocompleteChange("locale")(value)
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="locale"
-                  variant="outlined"
-                  size="small"
-                  label="Locale"
-                />
-              )}
-            />
-
-            <Autocomplete
-              value={timeZone}
-              options={timezoneOptions}
-              isOptionEqualToValue={(option, value) =>
-                option.timeZone === value.timeZone
-              }
-              groupBy={(option) => option.firstLetter}
-              getOptionLabel={(option) => option.timeZone}
-              onChange={(event, value) =>
-                handleAutocompleteChange("timeZone")(value)
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  size="small"
-                  label="Timezone"
-                />
-              )}
-            />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    value={hour12}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "update-option",
-                        payload: {
-                          option: "hour12",
-                          value: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                }
-                label="Hour 12"
+          <Autocomplete
+            value={state.locale}
+            options={LOCALES}
+            isOptionEqualToValue={(option, value) => option[0] === value[0]}
+            groupBy={([, name]) => name[0].toUpperCase()}
+            getOptionLabel={(option) => option[1]}
+            onChange={(event, value) =>
+              handleAutocompleteChange("locale")(value)
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                name="locale"
+                variant="outlined"
+                size="small"
+                label="Locale"
               />
-              <FormHelperText>
-                Whether to use 12-hour time (as opposed to 24-hour time).
-              </FormHelperText>
-            </FormGroup>
-            <Accordion defaultExpanded>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Fast Formatting</Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-              >
-                <RadioGroup
-                  name="dateStyle"
-                  label="Date style"
-                  helperText="The date formatting style to use when calling format()."
-                  value={dateStyle}
-                  onChange={handleRadioGroupChange}
-                  options={[...DATE_STYLES, "none"]}
-                />
+            )}
+          />
 
-                <RadioGroup
-                  name="timeStyle"
-                  label="Time style"
-                  helperText="The time formatting style to use when calling format()."
-                  value={timeStyle}
-                  onChange={handleRadioGroupChange}
-                  options={[...TIME_STYLES, "none"]}
+          <Autocomplete
+            value={timeZone}
+            options={timezoneOptions}
+            isOptionEqualToValue={(option, value) =>
+              option.timeZone === value.timeZone
+            }
+            groupBy={(option) => option.firstLetter}
+            getOptionLabel={(option) => option.timeZone}
+            onChange={(event, value) =>
+              handleAutocompleteChange("timeZone")(value)
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                size="small"
+                label="Timezone"
+              />
+            )}
+          />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  value={hour12}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "update-option",
+                      payload: {
+                        option: "hour12",
+                        value: e.target.checked,
+                      },
+                    })
+                  }
                 />
+              }
+              label="Hour 12"
+            />
+            <FormHelperText>
+              Whether to use 12-hour time (as opposed to 24-hour time).
+            </FormHelperText>
+          </FormGroup>
+          <Accordion defaultExpanded>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Fast Formatting</Typography>
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+            >
+              <RadioGroup
+                name="dateStyle"
+                label="Date style"
+                helperText="The date formatting style to use when calling format()."
+                value={dateStyle}
+                onChange={handleRadioGroupChange}
+                options={[...DATE_STYLES, "none"]}
+              />
 
-                <Alert severity="info">
-                  <AlertTitle>Note:</AlertTitle>
-                  <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
-                  <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
-                  <em>hour</em>, <em>month</em> , etc.).
-                </Alert>
-              </AccordionDetails>
-            </Accordion>
+              <RadioGroup
+                name="timeStyle"
+                label="Time style"
+                helperText="The time formatting style to use when calling format()."
+                value={timeStyle}
+                onChange={handleRadioGroupChange}
+                options={[...TIME_STYLES, "none"]}
+              />
 
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Specific Formatting</Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ display: "flex", gap: 2, flexDirection: "column" }}
-              >
-                <RadioGroup
-                  label="Day period"
-                  name="dayPeriod"
-                  helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
-                  value={dayPeriod}
-                  onChange={handleRadioGroupChange}
-                  options={[...DAY_PERIODS, "none"]}
-                />
-                <Alert severity="info">
-                  <AlertTitle>Note:</AlertTitle>
-                  This option only has an effect if a 12-hour clock is used.
-                  <br />
-                  Many locales use the same string irrespective of the width
-                  specified.
-                </Alert>
+              <Alert severity="info">
+                <AlertTitle>Note:</AlertTitle>
+                <em>dateStyle</em> can be used with <em>timeStyle</em>, but{" "}
+                <b>not</b> with other options (e.g. <em>weekday</em>,{" "}
+                <em>hour</em>, <em>month</em> , etc.).
+              </Alert>
+            </AccordionDetails>
+          </Accordion>
 
-                <RadioGroup
-                  label="Weekday"
-                  name="weekday"
-                  helperText="The representation of the weekday."
-                  value={weekday}
-                  onChange={handleRadioGroupChange}
-                  options={[...WEEK_DAYS, "none"]}
-                />
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Specific Formatting</Typography>
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{ display: "flex", gap: 2, flexDirection: "column" }}
+            >
+              <RadioGroup
+                label="Day period"
+                name="dayPeriod"
+                helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
+                value={dayPeriod}
+                onChange={handleRadioGroupChange}
+                options={[...DAY_PERIODS, "none"]}
+              />
+              <Alert severity="info">
+                <AlertTitle>Note:</AlertTitle>
+                This option only has an effect if a 12-hour clock is used.
+                <br />
+                Many locales use the same string irrespective of the width
+                specified.
+              </Alert>
 
-                <RadioGroup
-                  label="Era"
-                  name="era"
-                  helperText="The representation of the era."
-                  value={era}
-                  onChange={handleRadioGroupChange}
-                  options={[...ERAS, "none"]}
-                />
-                <RadioGroup
-                  label="Year"
-                  name="year"
-                  helperText="The representation of the year."
-                  value={year}
-                  onChange={handleRadioGroupChange}
-                  options={[...YEARS, "none"]}
-                />
-                <RadioGroup
-                  label="Month"
-                  name="month"
-                  helperText="The representation of the month."
-                  value={month}
-                  onChange={handleRadioGroupChange}
-                  options={[...MONTHS, "none"]}
-                />
-                <RadioGroup
-                  label="Day"
-                  name="day"
-                  helperText="The representation of the day."
-                  value={day}
-                  onChange={handleRadioGroupChange}
-                  options={[...DAYS, "none"]}
-                />
-                <RadioGroup
-                  label="Hour"
-                  name="hour"
-                  helperText="The representation of the hour."
-                  value={hour}
-                  onChange={handleRadioGroupChange}
-                  options={[...HOURS, "none"]}
-                />
-                <RadioGroup
-                  label="Minute"
-                  name="minute"
-                  helperText="The representation of the minute."
-                  value={minute}
-                  onChange={handleRadioGroupChange}
-                  options={[...MINUTES, "none"]}
-                />
-                <RadioGroup
-                  label="Second"
-                  name="second"
-                  helperText="The representation of the second."
-                  value={second}
-                  onChange={handleRadioGroupChange}
-                  options={[...SECONDS, "none"]}
-                />
-                <RadioGroup
-                  label="Fractional Second Digits"
-                  name="fractionalSecondDigits"
-                  helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
-                  value={fractionalSecondDigits}
-                  onChange={handleRadioGroupChange}
-                  options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
-                />
-              </AccordionDetails>
-            </Accordion>
-          </Stack>
+              <RadioGroup
+                label="Weekday"
+                name="weekday"
+                helperText="The representation of the weekday."
+                value={weekday}
+                onChange={handleRadioGroupChange}
+                options={[...WEEK_DAYS, "none"]}
+              />
+
+              <RadioGroup
+                label="Era"
+                name="era"
+                helperText="The representation of the era."
+                value={era}
+                onChange={handleRadioGroupChange}
+                options={[...ERAS, "none"]}
+              />
+              <RadioGroup
+                label="Year"
+                name="year"
+                helperText="The representation of the year."
+                value={year}
+                onChange={handleRadioGroupChange}
+                options={[...YEARS, "none"]}
+              />
+              <RadioGroup
+                label="Month"
+                name="month"
+                helperText="The representation of the month."
+                value={month}
+                onChange={handleRadioGroupChange}
+                options={[...MONTHS, "none"]}
+              />
+              <RadioGroup
+                label="Day"
+                name="day"
+                helperText="The representation of the day."
+                value={day}
+                onChange={handleRadioGroupChange}
+                options={[...DAYS, "none"]}
+              />
+              <RadioGroup
+                label="Hour"
+                name="hour"
+                helperText="The representation of the hour."
+                value={hour}
+                onChange={handleRadioGroupChange}
+                options={[...HOURS, "none"]}
+              />
+              <RadioGroup
+                label="Minute"
+                name="minute"
+                helperText="The representation of the minute."
+                value={minute}
+                onChange={handleRadioGroupChange}
+                options={[...MINUTES, "none"]}
+              />
+              <RadioGroup
+                label="Second"
+                name="second"
+                helperText="The representation of the second."
+                value={second}
+                onChange={handleRadioGroupChange}
+                options={[...SECONDS, "none"]}
+              />
+              <RadioGroup
+                label="Fractional Second Digits"
+                name="fractionalSecondDigits"
+                helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
+                value={fractionalSecondDigits}
+                onChange={handleRadioGroupChange}
+                options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
+              />
+            </AccordionDetails>
+          </Accordion>
+        </Stack>
+        <Stack
+          justifyContent="space-between"
+          spacing={1}
+          sx={{
+            width: ["100%", "100%", "50%"],
+            flex: 1,
+            overflowY: "auto",
+            px: 0.5,
+            pr: 2,
+            maxHeight: "80vh",
+          }}
+        >
           <Stack
-            width="50%"
-            justifyContent="space-between"
-            spacing={1}
+            alignItems="center"
             sx={{
-              flex: 1,
-              overflowY: "auto",
-              px: 0.5,
-              pr: 2,
-              maxHeight: "80vh",
+              position: ["fixed", "initial"],
+              zIndex: [20, "initial"],
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              backgroundColor: ["background.paper", "initial"],
+              p: [1, 0],
+              borderRadius: ["8px 8px 0px 0px", 0],
             }}
           >
-            <Stack alignItems="center">
-              <Typography align="center" component="h1" variant="h4">
-                {formattedDate}
-              </Typography>
-            </Stack>
-
-            <CodeSnippet code={codeSnippet} />
+            <Typography
+              align="center"
+              sx={{
+                fontSize: ["1.5rem", "2rem", "2.5rem"],
+              }}
+            >
+              {formattedDate}
+            </Typography>
           </Stack>
+
+          <CodeSnippet code={codeSnippet} />
         </Stack>
       </Layout>
     </SnackbarProvider>
