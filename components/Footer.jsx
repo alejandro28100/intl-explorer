@@ -7,9 +7,11 @@ function Footer() {
     <>
       <Divider />
       <Stack
-        spacing={2}
+        spacing={1}
         component="footer"
-        p={2}
+        px={2}
+        pt={2}
+        pb={[8, 2]}
         width="100%"
         direction="row"
         justifyContent="end"
@@ -24,12 +26,12 @@ function Footer() {
           href="https://github.com/alejandro28100/intl-explorer"
         >
           <IconButton>
-            <GitHub fontSize="large" />
+            <GitHub fontSize="medium" />
           </IconButton>
         </Link>
         <Link target="_blank" href="https://www.linkedin.com/in/alejandro-fc">
           <IconButton>
-            <LinkedIn fontSize="large" />
+            <LinkedIn fontSize="medium" />
           </IconButton>
         </Link>
       </Stack>
