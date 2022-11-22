@@ -311,6 +311,46 @@ function DateTimeFormat() {
     timeZone,
     firstLetter: timeZone[0].toUpperCase(),
   }));
+
+  function handleRadioGroupChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+
+    if (name === "fractionalSecondDigits") {
+      return dispatch({
+        type: "update-option",
+        payload: {
+          option: "fractionalSecondDigits",
+          value: value === "none" ? "none" : Number(value),
+        },
+      });
+    }
+    dispatch({
+      type: "update-option",
+      payload: {
+        option: name,
+        value,
+      },
+    });
+  }
+
+  function handleAutocompleteChange(name: string) {
+    return (value: any) =>
+      // We need to check if the value exists
+      // because the Autocomplete component will
+      // call this function with undefined when
+      // the user clears the input or when the user
+      // deletes the text in the input.
+
+      value &&
+      dispatch({
+        type: "update-option",
+        payload: {
+          option: name,
+          value,
+        },
+      });
+  }
+
   return (
     <SnackbarProvider>
       <Layout>
@@ -334,19 +374,13 @@ function DateTimeFormat() {
               isOptionEqualToValue={(option, value) => option[0] === value[0]}
               groupBy={([, name]) => name[0].toUpperCase()}
               getOptionLabel={(option) => option[1]}
-              onChange={(e, value) =>
-                value &&
-                dispatch({
-                  type: "update-option",
-                  payload: {
-                    option: "locale",
-                    value,
-                  },
-                })
+              onChange={(event, value) =>
+                handleAutocompleteChange("locale")(value)
               }
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  name="locale"
                   variant="outlined"
                   size="small"
                   label="Locale"
@@ -362,15 +396,8 @@ function DateTimeFormat() {
               }
               groupBy={(option) => option.firstLetter}
               getOptionLabel={(option) => option.timeZone}
-              onChange={(e, value) =>
-                value &&
-                dispatch({
-                  type: "update-option",
-                  payload: {
-                    option: "timeZone",
-                    value,
-                  },
-                })
+              onChange={(event, value) =>
+                handleAutocompleteChange("timeZone")(value)
               }
               renderInput={(params) => (
                 <TextField
@@ -415,34 +442,20 @@ function DateTimeFormat() {
                 sx={{ display: "flex", gap: 2, flexDirection: "column" }}
               >
                 <RadioGroup
+                  name="dateStyle"
                   label="Date style"
                   helperText="The date formatting style to use when calling format()."
                   value={dateStyle}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "dateStyle",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...DATE_STYLES, "none"]}
                 />
 
                 <RadioGroup
+                  name="timeStyle"
                   label="Time style"
                   helperText="The time formatting style to use when calling format()."
                   value={timeStyle}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "timeStyle",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...TIME_STYLES, "none"]}
                 />
 
@@ -468,17 +481,10 @@ function DateTimeFormat() {
               >
                 <RadioGroup
                   label="Day period"
+                  name="dayPeriod"
                   helperText={`The formatting style used for day periods like "in the morning", "am", "noon", "n" etc.`}
                   value={dayPeriod}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "dayPeriod",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...DAY_PERIODS, "none"]}
                 />
                 <Alert severity="info">
@@ -491,141 +497,75 @@ function DateTimeFormat() {
 
                 <RadioGroup
                   label="Weekday"
+                  name="weekday"
                   helperText="The representation of the weekday."
                   value={weekday}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "weekday",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...WEEK_DAYS, "none"]}
                 />
 
                 <RadioGroup
                   label="Era"
+                  name="era"
                   helperText="The representation of the era."
                   value={era}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "era",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...ERAS, "none"]}
                 />
                 <RadioGroup
                   label="Year"
+                  name="year"
                   helperText="The representation of the year."
                   value={year}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "year",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...YEARS, "none"]}
                 />
                 <RadioGroup
                   label="Month"
+                  name="month"
                   helperText="The representation of the month."
                   value={month}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "month",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...MONTHS, "none"]}
                 />
                 <RadioGroup
                   label="Day"
+                  name="day"
                   helperText="The representation of the day."
                   value={day}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "day",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...DAYS, "none"]}
                 />
                 <RadioGroup
                   label="Hour"
+                  name="hour"
                   helperText="The representation of the hour."
                   value={hour}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "hour",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...HOURS, "none"]}
                 />
                 <RadioGroup
                   label="Minute"
+                  name="minute"
                   helperText="The representation of the minute."
                   value={minute}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "minute",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...MINUTES, "none"]}
                 />
                 <RadioGroup
                   label="Second"
+                  name="second"
                   helperText="The representation of the second."
                   value={second}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "second",
-                        value: e.target.value,
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...SECONDS, "none"]}
                 />
                 <RadioGroup
                   label="Fractional Second Digits"
+                  name="fractionalSecondDigits"
                   helperText="The number of digits used to represent fractions of a second (any additional digits are truncated)."
                   value={fractionalSecondDigits}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "update-option",
-                      payload: {
-                        option: "fractionalSecondDigits",
-                        value:
-                          e.target.value === "none"
-                            ? e.target.value
-                            : Number(e.target.value),
-                      },
-                    })
-                  }
+                  onChange={handleRadioGroupChange}
                   options={[...FRACTIONAL_SECOND_DIGITS, "none"]}
                 />
               </AccordionDetails>
