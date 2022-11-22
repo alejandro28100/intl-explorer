@@ -23,7 +23,9 @@ function CodeSnippet(props: CodeSnippetProps) {
   return (
     <>
       <Stack alignItems="center" justifyContent="space-between" direction="row">
-        <Typography variant="h6">Code</Typography>
+        <Typography component="p" variant="h6">
+          Code
+        </Typography>
         <Tooltip title="Click to copy the snippet to the clipboard">
           <IconButton onClick={handleCopyTextToClipboard} size="large">
             <ContentCopy />

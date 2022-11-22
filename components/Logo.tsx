@@ -19,7 +19,9 @@ function Logo() {
       <IconButton size="large">
         <Explore fontSize="large" />
       </IconButton>
-      <Typography variant="h6">Intl Explorer</Typography>
+      <Typography component="span" variant="h6">
+        Intl Explorer
+      </Typography>
     </MUILink>
   );
 }
