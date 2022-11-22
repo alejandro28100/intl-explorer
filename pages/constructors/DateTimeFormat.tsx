@@ -2,11 +2,6 @@ import React from "react";
 import {
   Typography,
   Stack,
-  Container,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   FormControlLabel,
   AccordionSummary,
   Accordion,
