@@ -12,6 +12,10 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <meta
+            name="google-site-verification"
+            content="DuWPUETii05zGvOOXmJ5O1DC90yaECyXkduM_rtdVlk"
+          />
         </Head>
         <body>
           <Main />
